@@ -24,12 +24,16 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "MapboxAccessToken", providers.gradleProperty("MAPBOX_DOWNLOADS_TOKEN").get())
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "MapboxAccessToken", providers.gradleProperty("MAPBOX_DOWNLOADS_TOKEN").get())
         }
     }
     compileOptions {
@@ -41,6 +45,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.3"
@@ -54,6 +59,7 @@ android {
 
 dependencies {
 
+    implementation("com.mapbox.navigation:android:2.17.8")
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
@@ -93,10 +99,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 
-/*
 apollo {
-    service("uzi") {
-        packageName.set("com.lomolo.uzi")
+    service("uzicourier") {
+        packageName.set("com.lomolo.uzicourier")
     }
 }
-*/
