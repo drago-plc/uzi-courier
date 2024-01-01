@@ -84,12 +84,46 @@ fun HomeSuccessScreen(
     isAuthed: Boolean,
     onGetStartedClick: () -> Unit
 ) {
+    when {
+        isAuthed -> {
+           AuthedHomeScreen(
+               modifier = modifier,
+               mainViewModel = mainViewModel,
+               deviceDetails = deviceDetails
+           )
+        }
+        else -> {
+            Box {
+                Box(
+                    modifier = modifier
+                        .padding(bottom = 28.dp, start = 8.dp, end = 8.dp)
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .wrapContentHeight()
+                ) {
+                    GetStarted(
+                        onGetStartedClick = onGetStartedClick
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AuthedHomeScreen(
+    modifier: Modifier = Modifier,
+    mainViewModel: MainViewModel,
+    deviceDetails: DeviceDetails
+) {
     val uiSettings by remember {
         mutableStateOf(MapUiSettings(zoomControlsEnabled = false))
     }
+
     val mapProperties by remember {
         mutableStateOf(MapProperties(mapType = MapType.TERRAIN))
     }
+
     val cP = CameraPosition(deviceDetails.gps, 17f, 45f, 0f)
     val cameraPositionState = rememberCameraPositionState {
         position = cP
@@ -109,29 +143,14 @@ fun HomeSuccessScreen(
         enter = EnterTransition.None
     ) {
         Box(modifier = modifier) {
-            if (isAuthed) {
-                Box(
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .align(Alignment.TopCenter)
-                        .background(
-                            MaterialTheme.colorScheme.background,
-                        )
-                ) {
-                }
-            }
-            if (!isAuthed) {
-                Box(
-                    modifier = Modifier
-                        .padding(bottom = 28.dp, start = 8.dp, end = 8.dp)
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .wrapContentHeight()
-                ) {
-                    GetStarted(
-                        onGetStartedClick = onGetStartedClick
+            Box(
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .align(Alignment.TopCenter)
+                    .background(
+                        MaterialTheme.colorScheme.background
                     )
-                }
+            ) {
             }
         }
     }
