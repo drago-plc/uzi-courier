@@ -65,10 +65,6 @@ fun NameScreen(
             TopBar(
                 title = UserNameDestination.title,
                 scrollBehavior = scrollBehavior,
-                canNavigateBack = true,
-                navigateBack = {
-                    navController.popBackStack()
-                }
             )
         }
     ) {innerPadding ->
@@ -78,8 +74,15 @@ fun NameScreen(
                 .padding(innerPadding)
         ) {
             Name(
-                onNextSubmit = { navController.navigate(UserPhoneDestination.route) },
-                sessionViewModel = sessionViewModel
+                sessionViewModel = sessionViewModel,
+                onNavigateTo = {
+                    navController.navigate(it) {
+                        popUpTo(it) {
+                            inclusive = true
+                            saveState = true
+                        }
+                    }
+                }
             )
         }
     }

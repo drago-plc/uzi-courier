@@ -3,7 +3,6 @@ package com.lomolo.uzicourier.compose.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +36,8 @@ import com.lomolo.uzicourier.R
 import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.navigation.Navigation
 import com.lomolo.uzicourier.compose.signin.GetStarted
+import com.lomolo.uzicourier.compose.signin.UserNameDestination
+import com.lomolo.uzicourier.model.Session
 
 object HomeScreenDestination: Navigation {
     override val route = "home"
@@ -47,8 +48,9 @@ object HomeScreenDestination: Navigation {
 fun HomeScreen(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel = viewModel(),
-    isAuthed: Boolean,
-    onGetStartedClick: () -> Unit = {}
+    session: Session,
+    onGetStartedClick: () -> Unit = {},
+    onNavigateTo: (String) -> Unit = {}
 ) {
     val deviceDetails by mainViewModel.deviceDetailsUiState.collectAsState()
 
@@ -68,8 +70,9 @@ fun HomeScreen(
                     modifier = Modifier.matchParentSize(),
                     mainViewModel = mainViewModel,
                     deviceDetails = deviceDetails,
-                    isAuthed = isAuthed,
-                    onGetStartedClick = onGetStartedClick
+                    session = session,
+                    onGetStartedClick = onGetStartedClick,
+                    onNavigateTo = onNavigateTo
                 )
             }
         }
@@ -81,40 +84,45 @@ fun HomeSuccessScreen(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel,
     deviceDetails: DeviceDetails,
-    isAuthed: Boolean,
-    onGetStartedClick: () -> Unit
+    session: Session,
+    onGetStartedClick: () -> Unit,
+    onNavigateTo: (String) -> Unit = {}
 ) {
+    val isAuthed = session.token.isNotBlank()
+    val isOnboarding = session.onboarding
+
     when {
-        isAuthed -> {
-           AuthedHomeScreen(
+        isAuthed && !isOnboarding -> {
+           DefaultHomeScreen(
                modifier = modifier,
                mainViewModel = mainViewModel,
-               deviceDetails = deviceDetails
+               deviceDetails = deviceDetails,
+               onGetStartedClick = onGetStartedClick,
+               isAuthed = isAuthed
            )
         }
+        isAuthed && isOnboarding -> {
+            onNavigateTo(UserNameDestination.route)
+        }
         else -> {
-            Box {
-                Box(
-                    modifier = modifier
-                        .padding(bottom = 28.dp, start = 8.dp, end = 8.dp)
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .wrapContentHeight()
-                ) {
-                    GetStarted(
-                        onGetStartedClick = onGetStartedClick
-                    )
-                }
-            }
+            DefaultHomeScreen(
+               modifier = modifier,
+               mainViewModel = mainViewModel,
+               deviceDetails = deviceDetails,
+                onGetStartedClick = onGetStartedClick,
+                isAuthed = isAuthed
+           )
         }
     }
 }
 
 @Composable
-fun AuthedHomeScreen(
+fun DefaultHomeScreen(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel,
-    deviceDetails: DeviceDetails
+    deviceDetails: DeviceDetails,
+    onGetStartedClick: () -> Unit,
+    isAuthed: Boolean
 ) {
     val uiSettings by remember {
         mutableStateOf(MapUiSettings(zoomControlsEnabled = false))
@@ -143,14 +151,18 @@ fun AuthedHomeScreen(
         enter = EnterTransition.None
     ) {
         Box(modifier = modifier) {
-            Box(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .align(Alignment.TopCenter)
-                    .background(
-                        MaterialTheme.colorScheme.background
+            if (!isAuthed) {
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 28.dp, start = 8.dp, end = 8.dp)
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .wrapContentHeight()
+                ) {
+                    GetStarted(
+                        onGetStartedClick = onGetStartedClick
                     )
-            ) {
+                }
             }
         }
     }

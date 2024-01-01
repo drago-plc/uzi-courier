@@ -35,7 +35,8 @@ class SessionViewModel(
                     token = it[0].token,
                     id = it[0].id,
                     courierStatus = it[0].courierStatus,
-                    isCourier = it[0].isCourier
+                    isCourier = it[0].isCourier,
+                    onboarding = it[0].onboarding
                 )
             } else {
                 Session()
@@ -93,17 +94,48 @@ class SessionViewModel(
         }
     }
 
+    private fun parsePhoneNumber(number: String): String {
+        val p = phoneUtil.parse(number, deviceDetails.value.country)
+        return p.countryCode.toString()+p.nationalNumber.toString()
+    }
+
     fun signIn(cb: () -> Unit = {}) {
         signInUiState = SignInUiState.Loading
         viewModelScope.launch {
             signInUiState = try {
-                sessionRepository.signIn(signInInput.value)
+                sessionRepository.signIn(
+                    SignIn(
+                        firstName = signInInput.value.firstName,
+                        lastName = signInInput.value.lastName,
+                        phone = parsePhoneNumber(signInInput.value.phone)
+                    )
+                )
                 SignInUiState.Success.also { cb() }
             } catch(e: Exception) {
                 SignInUiState.Error(e.localizedMessage)
             }
         }
     }
+
+    fun onboardUser(cb: () -> Unit = {}) {
+        signInUiState = SignInUiState.Loading
+        viewModelScope.launch {
+            signInUiState = try {
+                sessionRepository.onboardUser(
+                    sessionUiState.value.id,
+                    SignIn(
+                        firstName = signInInput.value.firstName,
+                        lastName  = signInInput.value.lastName,
+                        phone = parsePhoneNumber(signInInput.value.phone)
+                    )
+                )
+                SignInUiState.Success.also { cb() }
+            } catch(e: Exception) {
+                SignInUiState.Error(e.localizedMessage)
+            }
+        }
+    }
+
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
