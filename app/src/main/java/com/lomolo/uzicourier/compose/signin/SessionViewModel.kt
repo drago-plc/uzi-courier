@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class SignInViewModel(
+class SessionViewModel(
     private val sessionRepository: SessionInterface,
     mainViewModel: MainViewModel
 ): ViewModel() {
@@ -33,7 +33,9 @@ class SignInViewModel(
             if (it.isNotEmpty()) {
                 Session(
                     token = it[0].token,
-                    id = it[0].id
+                    id = it[0].id,
+                    courierStatus = it[0].courierStatus,
+                    isCourier = it[0].isCourier
                 )
             } else {
                 Session()

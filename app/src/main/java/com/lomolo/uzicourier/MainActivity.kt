@@ -39,9 +39,8 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
-import com.lomolo.uzicourier.R
 import com.lomolo.uzicourier.permissions.LocationPermission
-import com.lomolo.uzicourier.ui.theme.UziTheme
+import com.lomolo.uzicourier.ui.theme.UziCourierTheme
 import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
@@ -132,7 +131,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            UziTheme {
+            UziCourierTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -181,8 +180,8 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showBackground = true)
 @Composable
-fun UziAppPreview() {
-    UziTheme {
+fun UziCourierAppPreview() {
+    UziCourierTheme {
         UziCourierApp()
     }
 }

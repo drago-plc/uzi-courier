@@ -17,16 +17,16 @@ import com.lomolo.uzicourier.compose.home.HomeScreen
 import com.lomolo.uzicourier.compose.home.HomeScreenDestination
 import com.lomolo.uzicourier.compose.navigation.graphs.UserGraphDestination
 import com.lomolo.uzicourier.compose.navigation.graphs.user
-import com.lomolo.uzicourier.compose.signin.SignInViewModel
+import com.lomolo.uzicourier.compose.signin.SessionViewModel
 
 @Composable
-fun UziNavHost(
+fun UziCourierNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     mainViewModel: MainViewModel = viewModel(factory = UziViewModelProvider.Factory),
-    signInViewModel: SignInViewModel = viewModel(factory = UziViewModelProvider.Factory),
+    sessionViewModel: SessionViewModel = viewModel(factory = UziViewModelProvider.Factory),
 ) {
-    val sessionUiState by signInViewModel.sessionUiState.collectAsState()
+    val sessionUiState by sessionViewModel.sessionUiState.collectAsState()
 
     NavHost(
         modifier = modifier,
@@ -49,7 +49,7 @@ fun UziNavHost(
         }
         user(
             navController = navController,
-            signInViewModel = signInViewModel,
+            sessionViewModel = sessionViewModel,
             mainViewModel = mainViewModel
         )
     }

@@ -3,18 +3,18 @@ package com.lomolo.uzicourier
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.lomolo.uzicourier.compose.navigation.UziNavHost
-import com.lomolo.uzicourier.ui.theme.UziTheme
+import com.lomolo.uzicourier.compose.navigation.UziCourierNavHost
+import com.lomolo.uzicourier.ui.theme.UziCourierTheme
 
 @Composable
 fun UziCourierApplication() {
-    UziNavHost(navController = rememberNavController())
+    UziCourierNavHost(navController = rememberNavController())
 }
 
 @Preview(showBackground = true)
 @Composable
 fun UziCourierApplicationPreview() {
-    UziTheme {
+    UziCourierTheme {
         UziCourierApplication()
     }
 }

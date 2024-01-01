@@ -82,7 +82,7 @@ private val darkColors = darkColorScheme(
 )
 
 @Composable
-fun UziTheme(
+fun UziCourierTheme(
   useDarkTheme: Boolean = isSystemInDarkTheme(),
   // Dynamic color is available in Android 12+
   dynamicColor: Boolean = true,
