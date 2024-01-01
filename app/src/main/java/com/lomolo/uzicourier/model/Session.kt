@@ -9,7 +9,7 @@ data class Session(
     val token: String = "",
     val courierStatus: CourierStatus = CourierStatus.OFFLINE,
     val isCourier: Boolean = false,
-    val onboarding: Boolean = false
+    val onboarding: Boolean = true
 )
 
 enum class CourierStatus{OFFLINE, ONLINE}
