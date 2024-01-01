@@ -37,7 +37,6 @@ import com.lomolo.uzicourier.R
 import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.navigation.Navigation
 import com.lomolo.uzicourier.compose.signin.GetStarted
-import com.lomolo.uzicourier.compose.trip.StartTrip
 
 object HomeScreenDestination: Navigation {
     override val route = "home"
@@ -119,7 +118,6 @@ fun HomeSuccessScreen(
                             MaterialTheme.colorScheme.background,
                         )
                 ) {
-                    StartTrip()
                 }
             }
             if (!isAuthed) {
