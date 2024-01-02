@@ -15,5 +15,5 @@ interface SessionDao{
     @Query("SELECT * FROM sessions LIMIT 1")
     fun getSession(): Flow<List<Session>>
     @Update
-    fun updateSession(session: Session)
+    suspend fun updateSession(session: Session)
 }

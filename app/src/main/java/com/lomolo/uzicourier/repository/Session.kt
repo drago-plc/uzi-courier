@@ -35,6 +35,7 @@ class SessionRepository(
         return Session(
             token = session.token,
             courierStatus = session.courierStatus,
+            phone = session.phone,
             isCourier = session.isCourier,
             onboarding = session.onboarding
         )
@@ -43,6 +44,7 @@ class SessionRepository(
         return Session(
             id = sessionId,
             token = session.token,
+            phone = session.phone,
             courierStatus = session.courierStatus,
             isCourier = session.isCourier,
             onboarding = session.onboarding

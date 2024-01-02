@@ -35,6 +35,7 @@ class SessionViewModel(
                     token = it[0].token,
                     id = it[0].id,
                     courierStatus = it[0].courierStatus,
+                    phone = it[0].phone,
                     isCourier = it[0].isCourier,
                     onboarding = it[0].onboarding
                 )
@@ -126,11 +127,12 @@ class SessionViewModel(
                     SignIn(
                         firstName = signInInput.value.firstName,
                         lastName  = signInInput.value.lastName,
-                        phone = parsePhoneNumber(signInInput.value.phone)
+                        phone = sessionUiState.value.phone
                     )
                 )
                 SignInUiState.Success.also { cb() }
             } catch(e: Exception) {
+                println(e)
                 SignInUiState.Error(e.localizedMessage)
             }
         }
