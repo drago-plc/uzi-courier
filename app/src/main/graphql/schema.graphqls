@@ -1,38 +1,162 @@
-type Mutation {
-  signIn(input: SigninInput!): Session!
-}
-
-type Query {
-  hello: String!
-}
-
-type Session {
+type Courier {
   id: UUID!
-
-  ip: String!
-
-  token: String!
 
   user_id: UUID!
 
-  expires: Time!
+  verified: Boolean!
+
+  status: CourierStatus!
+
+  rating: Float!
+
+  trip_id: UUID
+
+  completedTrips: Int!
+
+  points: Int!
+
+  upload_id: UUID
 
   created_at: Time
 
   updated_at: Time
 }
 
-input SigninInput {
-  first_name: String!
+enum CourierStatus {
+  OFFLINE
 
-  last_name: String!
+  ONLINE
+
+  ONBOARDING
+}
+
+input CourierUploadInput {
+  type: UploadFile!
+
+  uri: String!
+}
+
+type Gps {
+  lat: Float!
+
+  lng: Float!
+}
+
+type Mutation {
+  createCourierDocument(input: CourierUploadInput!): Boolean!
+}
+
+type Product {
+  id: UUID!
+
+  name: String!
+
+  description: String!
+
+  price: Int!
+
+  created_at: Time
+
+  updated_at: Time
+}
+
+type Query {
+  hello: String!
+
+  getCourierDocuments: [Uploads!]!
+}
+
+type Route {
+  id: UUID!
+
+  distance: String!
+
+  eta: Time!
+
+  created_at: Time
+
+  updated_at: Time
+}
+
+type Session {
+  token: String!
+
+  isCourier: Boolean!
+
+  onboarding: Boolean!
 
   phone: String!
+
+  courierStatus: CourierStatus
 }
 
 scalar Time
 
+type Trip {
+  id: UUID!
+
+  courier_id: UUID!
+
+  user_id: UUID!
+
+  start_location: Gps!
+
+  end_location: Gps!
+
+  status: TripStatus!
+
+  cost: String
+
+  route_id: UUID
+
+  route: Route
+
+  created_at: Time
+
+  updated_at: Time
+}
+
+enum TripStatus {
+  ARRIVING
+
+  EN_ROUTE
+
+  COMPLETE
+}
+
 scalar UUID
+
+enum UploadFile {
+  DP
+
+  MCR
+
+  ID
+
+  PC
+
+  LB
+
+  VI
+}
+
+type Uploads {
+  ID: UUID!
+
+  type: String
+
+  uri: String
+
+  verified: Boolean!
+
+  courier_id: UUID
+
+  user_id: UUID
+
+  created_at: Time
+
+  updated_at: Time
+}
 
 type User {
   id: UUID!
@@ -42,6 +166,10 @@ type User {
   last_name: String!
 
   phone: String!
+
+  courier_id: UUID
+
+  courier: Courier
 
   created_at: Time
 

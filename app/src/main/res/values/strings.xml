@@ -14,4 +14,6 @@
     <string name="arrow_up">arrow up</string>
     <string name="go_back">go back</string>
     <string name="sign_in">Sign In</string>
+    <string name="let_s_get_you_setup">Let\'s get you setup</string>
+    <string name="lets_get_you_setup_subheading">We need the following document verified by us before you start working on Uzi.</string>
 </resources>

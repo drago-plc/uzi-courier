@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.lomolo.uzicourier.compose.onboarding.OnboardingViewModel
 import com.lomolo.uzicourier.compose.signin.SessionViewModel
 
 /*
@@ -21,6 +22,11 @@ object UziViewModelProvider {
             SessionViewModel(
                 uziApplication().container.sessionRepository,
                 mainViewModel
+            )
+        }
+        initializer {
+            OnboardingViewModel(
+                uziApplication().container.uziGqlApiRepository
             )
         }
     }

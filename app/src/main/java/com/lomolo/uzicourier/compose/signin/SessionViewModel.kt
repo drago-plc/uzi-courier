@@ -108,7 +108,8 @@ class SessionViewModel(
                     SignIn(
                         firstName = signInInput.value.firstName,
                         lastName = signInInput.value.lastName,
-                        phone = parsePhoneNumber(signInInput.value.phone)
+                        phone = parsePhoneNumber(signInInput.value.phone),
+                        courier = signInInput.value.courier
                     )
                 )
                 SignInUiState.Success.also { cb() }

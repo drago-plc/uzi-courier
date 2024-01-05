@@ -1,0 +1,8 @@
+query GetCourierDocuments {
+    getCourierDocuments {
+        ID
+        type
+        uri
+        verified
+    }
+}

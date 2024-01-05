@@ -6,6 +6,8 @@ import com.apollographql.apollo3.api.http.HttpRequest
 import com.apollographql.apollo3.api.http.HttpResponse
 import com.apollographql.apollo3.network.http.HttpInterceptor
 import com.apollographql.apollo3.network.http.HttpInterceptorChain
+import com.lomolo.uzicourier.network.UziGqlApiInterface
+import com.lomolo.uzicourier.network.UziGqlApiRepository
 import com.lomolo.uzicourier.network.UziRestApiServiceInterface
 import com.lomolo.uzicourier.repository.SessionInterface
 import com.lomolo.uzicourier.repository.SessionRepository
@@ -25,6 +27,7 @@ interface AppContainer {
     val uziRestApiService: UziRestApiServiceInterface
     val sessionRepository: SessionInterface
     val apolloClient: ApolloClient
+    val uziGqlApiRepository: UziGqlApiInterface
 }
 
 class AuthInterceptor(
@@ -91,4 +94,8 @@ class DefaultContainer(private val context: Context): AppContainer {
             )
         )
         .build()
+
+    override val uziGqlApiRepository: UziGqlApiInterface by lazy {
+        UziGqlApiRepository(apolloClient)
+    }
 }
