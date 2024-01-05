@@ -80,7 +80,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomeSuccessScreen(
+private fun HomeSuccessScreen(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel,
     deviceDetails: DeviceDetails,
@@ -117,7 +117,7 @@ fun HomeSuccessScreen(
 }
 
 @Composable
-fun DefaultHomeScreen(
+private fun DefaultHomeScreen(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel,
     deviceDetails: DeviceDetails,
@@ -169,7 +169,7 @@ fun DefaultHomeScreen(
 }
 
 @Composable
-fun HomeErrorScreen(
+private fun HomeErrorScreen(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel
 ) {
