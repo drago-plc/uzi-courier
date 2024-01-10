@@ -1,14 +1,22 @@
 package com.lomolo.uzicourier.compose.navigation.graphs
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.lomolo.uzicourier.R
+import com.lomolo.uzicourier.compose.BottomBar
 import com.lomolo.uzicourier.compose.TopBar
 import com.lomolo.uzicourier.compose.navigation.Navigation
 import com.lomolo.uzicourier.compose.onboarding.DisplayDocumentDestination
@@ -45,7 +53,26 @@ fun NavGraphBuilder.onboarding(
         composable(route = DisplayDocumentDestination.route) {
             Scaffold(
                 topBar = {
-                    TopBar()
+                    TopBar(
+                        navigateBack = {
+                            navController.popBackStack()
+                        }
+                    )
+                },
+                bottomBar = {
+                    BottomBar {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            onClick = { /*TODO*/ },
+                            shape = MaterialTheme.shapes.small
+                        ) {
+                            Text(
+                                text = stringResource(R.string.submit)
+                            )
+                        }
+                    }
                 }
             ) {innerPadding ->
                 Surface(
@@ -59,7 +86,26 @@ fun NavGraphBuilder.onboarding(
         composable(route = PoliceClearanceDocumentDestination.route) {
             Scaffold(
                 topBar = {
-                    TopBar()
+                    TopBar(
+                        navigateBack = {
+                            navController.popBackStack()
+                        }
+                    )
+                },
+                bottomBar = {
+                    BottomBar {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            onClick = { /*TODO*/ },
+                            shape = MaterialTheme.shapes.small
+                        ) {
+                            Text(
+                                text = stringResource(R.string.submit)
+                            )
+                        }
+                    }
                 }
             ) {innerPadding ->
                 Surface(
@@ -73,7 +119,26 @@ fun NavGraphBuilder.onboarding(
         composable(route = IdDocumentDestination.route) {
             Scaffold(
                 topBar = {
-                    TopBar()
+                    TopBar(
+                        navigateBack = {
+                            navController.popBackStack()
+                        }
+                    )
+                },
+                bottomBar = {
+                    BottomBar {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            onClick = { /*TODO*/ },
+                            shape = MaterialTheme.shapes.small
+                        ) {
+                            Text(
+                                text = stringResource(R.string.submit)
+                            )
+                        }
+                    }
                 }
             ) {innerPadding ->
                 Surface(
@@ -87,7 +152,26 @@ fun NavGraphBuilder.onboarding(
         composable(route = MRDocumentDestination.route) {
             Scaffold(
                 topBar = {
-                    TopBar()
+                    TopBar(
+                        navigateBack = {
+                            navController.popBackStack()
+                        }
+                    )
+                },
+                bottomBar = {
+                    BottomBar {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            onClick = { /*TODO*/ },
+                            shape = MaterialTheme.shapes.small
+                        ) {
+                            Text(
+                                text = stringResource(R.string.submit)
+                            )
+                        }
+                    }
                 }
             ) {innerPadding ->
                 Surface(
