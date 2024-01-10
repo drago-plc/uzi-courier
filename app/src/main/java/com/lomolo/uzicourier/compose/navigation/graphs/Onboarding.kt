@@ -1,6 +1,7 @@
 package com.lomolo.uzicourier.compose.navigation.graphs
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,13 +48,18 @@ fun NavGraphBuilder.onboarding(
     ) {
         composable(route = OnboardingDestination.route) {
             OnboardingScreen(
-                onboardingViewModel = onboardingViewModel
+                onboardingViewModel = onboardingViewModel,
+                onNavigateTo = {
+                    navController.navigate(it)
+                }
             )
         }
         composable(route = DisplayDocumentDestination.route) {
             Scaffold(
                 topBar = {
                     TopBar(
+                        title = DisplayDocumentDestination.title,
+                        canNavigateBack = true,
                         navigateBack = {
                             navController.popBackStack()
                         }
@@ -64,7 +70,8 @@ fun NavGraphBuilder.onboarding(
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp),
+                                .height(48.dp)
+                                .padding(start = 8.dp, end = 8.dp),
                             onClick = { /*TODO*/ },
                             shape = MaterialTheme.shapes.small
                         ) {
@@ -79,7 +86,9 @@ fun NavGraphBuilder.onboarding(
                     modifier = Modifier
                         .padding(innerPadding)
                 ) {
-                    DisplayPhotoDocument()
+                    DisplayPhotoDocument(
+                        onboardingViewModel = onboardingViewModel
+                    )
                 }
             }
         }
@@ -87,6 +96,8 @@ fun NavGraphBuilder.onboarding(
             Scaffold(
                 topBar = {
                     TopBar(
+                        title = PoliceClearanceDocumentDestination.title,
+                        canNavigateBack = true,
                         navigateBack = {
                             navController.popBackStack()
                         }
@@ -97,7 +108,8 @@ fun NavGraphBuilder.onboarding(
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp),
+                                .height(48.dp)
+                                .padding(start = 8.dp, end = 8.dp),
                             onClick = { /*TODO*/ },
                             shape = MaterialTheme.shapes.small
                         ) {
@@ -112,7 +124,9 @@ fun NavGraphBuilder.onboarding(
                     modifier = Modifier
                         .padding(innerPadding)
                 ) {
-                    PoliceClearanceDocument()
+                    PoliceClearanceDocument(
+                        onboardingViewModel = onboardingViewModel
+                    )
                 }
             }
         }
@@ -120,6 +134,8 @@ fun NavGraphBuilder.onboarding(
             Scaffold(
                 topBar = {
                     TopBar(
+                        title = IdDocumentDestination.title,
+                        canNavigateBack = true,
                         navigateBack = {
                             navController.popBackStack()
                         }
@@ -130,7 +146,8 @@ fun NavGraphBuilder.onboarding(
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp),
+                                .height(48.dp)
+                                .padding(start = 8.dp, end = 8.dp),
                             onClick = { /*TODO*/ },
                             shape = MaterialTheme.shapes.small
                         ) {
@@ -145,7 +162,9 @@ fun NavGraphBuilder.onboarding(
                     modifier = Modifier
                         .padding(innerPadding)
                 ) {
-                    IdDocument()
+                    IdDocument(
+                        onboardingViewModel = onboardingViewModel
+                    )
                 }
             }
         }
@@ -153,6 +172,8 @@ fun NavGraphBuilder.onboarding(
             Scaffold(
                 topBar = {
                     TopBar(
+                        title = MRDocumentDestination.title,
+                        canNavigateBack = true,
                         navigateBack = {
                             navController.popBackStack()
                         }
@@ -163,7 +184,8 @@ fun NavGraphBuilder.onboarding(
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp),
+                                .height(48.dp)
+                                .padding(start = 8.dp, end = 8.dp),
                             onClick = { /*TODO*/ },
                             shape = MaterialTheme.shapes.small
                         ) {
@@ -178,7 +200,9 @@ fun NavGraphBuilder.onboarding(
                     modifier = Modifier
                         .padding(innerPadding)
                 ) {
-                    MRDocument()
+                    MRDocument(
+                        onboardingViewModel = onboardingViewModel
+                    )
                 }
             }
         }

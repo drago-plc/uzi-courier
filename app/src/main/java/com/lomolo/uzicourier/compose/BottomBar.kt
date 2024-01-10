@@ -1,5 +1,6 @@
 package com.lomolo.uzicourier.compose
 
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
@@ -8,7 +9,7 @@ fun BottomBar(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit = {}
 ) {
-    BottomBar(
+    BottomAppBar(
         modifier = modifier
     ) {
         content()

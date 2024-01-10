@@ -6,14 +6,16 @@ import com.lomolo.uzicourier.compose.navigation.Navigation
 
 object PoliceClearanceDocumentDestination: Navigation {
     override val route = "police_clearance_doc"
-    override val title = null
+    override val title = "Police clearance"
 }
 
 @Composable
 fun PoliceClearanceDocument(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onboardingViewModel: OnboardingViewModel
 ) {
     UploadDocumentScreen(
-        modifier = modifier
+        modifier = modifier,
+        onboardingViewModel = onboardingViewModel
     )
 }

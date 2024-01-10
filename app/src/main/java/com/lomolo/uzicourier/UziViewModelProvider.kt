@@ -26,7 +26,8 @@ object UziViewModelProvider {
         }
         initializer {
             OnboardingViewModel(
-                uziApplication().container.uziGqlApiRepository
+                uziApplication().container.uziGqlApiRepository,
+                uziApplication().container.uziRestApiService
             )
         }
     }

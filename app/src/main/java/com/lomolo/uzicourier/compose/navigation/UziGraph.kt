@@ -17,7 +17,9 @@ import com.lomolo.uzicourier.UziViewModelProvider
 import com.lomolo.uzicourier.compose.home.HomeScreen
 import com.lomolo.uzicourier.compose.home.HomeScreenDestination
 import com.lomolo.uzicourier.compose.navigation.graphs.UserGraphDestination
+import com.lomolo.uzicourier.compose.navigation.graphs.onboarding
 import com.lomolo.uzicourier.compose.navigation.graphs.user
+import com.lomolo.uzicourier.compose.onboarding.OnboardingViewModel
 import com.lomolo.uzicourier.compose.signin.SessionViewModel
 
 @Composable
@@ -26,6 +28,7 @@ fun UziCourierNavHost(
     navController: NavHostController,
     mainViewModel: MainViewModel = viewModel(factory = UziViewModelProvider.Factory),
     sessionViewModel: SessionViewModel = viewModel(factory = UziViewModelProvider.Factory),
+    onboardingViewModel: OnboardingViewModel = viewModel(factory = UziViewModelProvider.Factory)
 ) {
     val session by sessionViewModel.sessionUiState.collectAsState()
 
@@ -67,6 +70,10 @@ fun UziCourierNavHost(
             navController = navController,
             sessionViewModel = sessionViewModel,
             mainViewModel = mainViewModel
+        )
+        onboarding(
+            navController = navController,
+            onboardingViewModel = onboardingViewModel
         )
     }
 }

@@ -35,8 +35,10 @@ import com.lomolo.uzicourier.MainViewModel
 import com.lomolo.uzicourier.R
 import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.navigation.Navigation
+import com.lomolo.uzicourier.compose.onboarding.OnboardingDestination
 import com.lomolo.uzicourier.compose.signin.GetStarted
 import com.lomolo.uzicourier.compose.signin.UserNameDestination
+import com.lomolo.uzicourier.model.CourierStatus
 import com.lomolo.uzicourier.model.Session
 
 object HomeScreenDestination: Navigation {
@@ -90,8 +92,15 @@ private fun HomeSuccessScreen(
 ) {
     val isAuthed = session.token.isNotBlank()
     val isOnboarding = session.onboarding
+    val courierStatus = session.courierStatus
 
     when {
+        isAuthed && isOnboarding -> {
+            onNavigateTo(UserNameDestination.route)
+        }
+        isAuthed && courierStatus == CourierStatus.ONBOARDING -> {
+            onNavigateTo(OnboardingDestination.route)
+        }
         isAuthed && !isOnboarding -> {
            DefaultHomeScreen(
                modifier = modifier,
@@ -100,9 +109,6 @@ private fun HomeSuccessScreen(
                onGetStartedClick = onGetStartedClick,
                isAuthed = isAuthed
            )
-        }
-        isAuthed && isOnboarding -> {
-            onNavigateTo(UserNameDestination.route)
         }
         else -> {
             DefaultHomeScreen(

@@ -1,5 +1,7 @@
 package com.lomolo.uzicourier.compose.onboarding
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,14 +13,18 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.lomolo.uzicourier.GetCourierDocumentsQuery
 import com.lomolo.uzicourier.R
+import com.lomolo.uzicourier.compose.RetryErrorScreen
+import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.navigation.Navigation
-import com.lomolo.uzicourier.ui.theme.UziCourierTheme
+import kotlinx.coroutines.launch
 
 object OnboardingDestination: Navigation {
     override val route = "onboarding"
@@ -28,37 +34,65 @@ object OnboardingDestination: Navigation {
 private data class Doc(
     val name: String,
     val required: Boolean = false,
-    val type: String
+    val type: String,
+    val route: String
 )
 
 private val docs = listOf(
-    Doc("Motorcycle Registration Certificate", type = "MCR"),
-    Doc("Profile Photo", true, type = "DP"),
-    Doc("Police Clearance", true, type = "PC"),
-    Doc("Identification Document", true, type = "ID")
+    Doc("Motorcycle Registration Certificate", type = "MCR", route = MRDocumentDestination.route),
+    Doc("Profile Photo", true, type = "DP", route = DisplayDocumentDestination.route),
+    Doc("Police Clearance", true, type = "PC", route = PoliceClearanceDocumentDestination.route),
+    Doc("Identification Document", true, type = "ID", route = IdDocumentDestination.route)
 )
 
 @Composable
 fun OnboardingScreen(
     modifier: Modifier = Modifier,
-    onboardingViewModel: OnboardingViewModel
+    onboardingViewModel: OnboardingViewModel,
+    onNavigateTo: (String) -> Unit = {}
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Heading(
-            modifier = Modifier
-                .fillMaxWidth(),
-            heading = stringResource(R.string.let_s_get_you_setup),
-            subHeading = stringResource(R.string.lets_get_you_setup_subheading)
-        )
-        RequiredDocuments(
-            modifier = Modifier
-                .padding(top = 16.dp),
-            docs = docs
-        )
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        onboardingViewModel.getCourierDocuments()
+    }
+
+    when(val s = onboardingViewModel.getCourierDocumentsUiState) {
+        is GetCourierDocumentsState.Success -> {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Heading(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    heading = stringResource(R.string.let_s_get_you_setup),
+                    subHeading = stringResource(R.string.lets_get_you_setup_subheading)
+                )
+                RequiredDocuments(
+                    modifier = Modifier
+                        .padding(top = 16.dp),
+                    docs = docs,
+                    courierDocs = s.data,
+                    onNavigateTo = onNavigateTo
+                )
+            }
+        }
+        is GetCourierDocumentsState.Loading -> {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Loader()
+            }
+        }
+        is GetCourierDocumentsState.Error -> {
+           RetryErrorScreen(
+               onRetry = { scope.launch { onboardingViewModel.getCourierDocuments() } }
+           )
+        }
     }
 }
 
@@ -87,7 +121,9 @@ private fun Heading(
 @Composable
 private fun RequiredDocuments(
     modifier: Modifier = Modifier,
-    docs: List<Doc>
+    docs: List<Doc>,
+    courierDocs: List<GetCourierDocumentsQuery.GetCourierDocument>,
+    onNavigateTo: (String) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -107,15 +143,10 @@ private fun RequiredDocuments(
                 },
                 modifier = Modifier
                     .padding(8.dp)
+                    .clickable {
+                        onNavigateTo(doc.route)
+                    }
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun OnboardingPreview() {
-    UziCourierTheme {
-        OnboardingScreen(onboardingViewModel = viewModel())
     }
 }

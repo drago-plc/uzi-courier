@@ -6,14 +6,16 @@ import com.lomolo.uzicourier.compose.navigation.Navigation
 
 object IdDocumentDestination: Navigation {
     override val route = "id_document"
-    override val title = null
+    override val title = "Government issued ID"
 }
 
 @Composable
 fun IdDocument(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onboardingViewModel: OnboardingViewModel
 ) {
     UploadDocumentScreen(
-        modifier = modifier
+        modifier = modifier,
+        onboardingViewModel = onboardingViewModel
     )
 }

@@ -8,9 +8,9 @@ data class Session(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val token: String = "",
     val phone: String = "",
-    val courierStatus: CourierStatus = CourierStatus.OFFLINE,
+    val courierStatus: CourierStatus = CourierStatus.ONBOARDING,
     val isCourier: Boolean = false,
     val onboarding: Boolean = true
 )
 
-enum class CourierStatus{OFFLINE, ONLINE}
+enum class CourierStatus{OFFLINE, ONLINE, ONBOARDING}

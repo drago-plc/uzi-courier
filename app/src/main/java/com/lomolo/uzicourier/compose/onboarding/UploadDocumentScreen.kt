@@ -1,27 +1,60 @@
 package com.lomolo.uzicourier.compose.onboarding
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.lomolo.uzicourier.R
-import com.lomolo.uzicourier.ui.theme.UziCourierTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun UploadDocumentScreen(
     modifier: Modifier = Modifier,
     text: @Composable () -> Unit? = {},
-    onProceedClick: () -> Unit = {}
+    onboardingViewModel: OnboardingViewModel
 ) {
-    val imageUri = "https://uzi-images.s3.eu-west-2.amazonaws.com/20220222_143429.jpg"
+    var uploadError: String? = null
+    var imageUri: Any = R.drawable.image_gallery
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val pickMedia = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) {
+        if (it != null) {
+            val stream = context.contentResolver.openInputStream(it)
+            if (stream != null) {
+                onboardingViewModel.uploadImage(stream)
+            }
+        }
+    }
+    when(val s = onboardingViewModel.imageUiState) {
+        is ImageState.Loading -> {
+            imageUri = R.drawable.loading_img
+        }
+        is ImageState.Error -> {
+            uploadError = s.message
+            imageUri = R.drawable.ic_broken_image
+        }
+        is ImageState.Success -> {
+            if (s.uri != null) {
+                imageUri = s.uri
+            }
+        }
+    }
 
     Column(
         modifier = modifier
@@ -41,14 +74,22 @@ fun UploadDocumentScreen(
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
+                .clickable {
+                    scope.launch {
+                        pickMedia.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly
+                            )
+                        )
+                    }
+                }
         )
-    }
-}
-
-@Preview
-@Composable
-fun UploadDocumentPreview() {
-    UziCourierTheme {
-        UploadDocumentScreen()
+        if (uploadError != null) {
+            Text(
+                text = uploadError,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
     }
 }

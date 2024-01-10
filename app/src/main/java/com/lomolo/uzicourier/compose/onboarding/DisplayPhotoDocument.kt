@@ -6,14 +6,16 @@ import com.lomolo.uzicourier.compose.navigation.Navigation
 
 object DisplayDocumentDestination: Navigation {
     override val route = "display_pic"
-    override val title = null
+    override val title = "Profile picture"
 }
 
 @Composable
 fun DisplayPhotoDocument(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onboardingViewModel: OnboardingViewModel
 ) {
     UploadDocumentScreen(
+        onboardingViewModel = onboardingViewModel,
         modifier = modifier
     )
 }

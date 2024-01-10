@@ -6,15 +6,17 @@ import com.lomolo.uzicourier.compose.navigation.Navigation
 
 object MRDocumentDestination: Navigation {
     override val route = "motor_registration"
-    override val title = null
+    override val title = "Motor registration"
 }
 
 @Composable
 fun MRDocument(
     modifier: Modifier = Modifier,
-    text: @Composable () -> Unit? = {}
+    text: @Composable () -> Unit? = {},
+    onboardingViewModel: OnboardingViewModel
 ) {
     UploadDocumentScreen(
-        text = text
+        text = text,
+        onboardingViewModel = onboardingViewModel
     )
 }
