@@ -16,7 +16,9 @@ fun MRDocument(
     onboardingViewModel: OnboardingViewModel
 ) {
     UploadDocumentScreen(
+        modifier = modifier,
         text = text,
-        onboardingViewModel = onboardingViewModel
+        onboardingViewModel = onboardingViewModel,
+        key = "MR"
     )
 }

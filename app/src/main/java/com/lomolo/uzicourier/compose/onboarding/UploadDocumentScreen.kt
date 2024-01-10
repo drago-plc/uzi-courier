@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,8 +27,10 @@ import kotlinx.coroutines.launch
 fun UploadDocumentScreen(
     modifier: Modifier = Modifier,
     text: @Composable () -> Unit? = {},
-    onboardingViewModel: OnboardingViewModel
+    onboardingViewModel: OnboardingViewModel,
+    key: String
 ) {
+    val uploads by onboardingViewModel.imageUploadsUiState.collectAsState()
     var uploadError: String? = null
     var imageUri: Any = R.drawable.image_gallery
     val context = LocalContext.current
@@ -37,11 +41,11 @@ fun UploadDocumentScreen(
         if (it != null) {
             val stream = context.contentResolver.openInputStream(it)
             if (stream != null) {
-                onboardingViewModel.uploadImage(stream)
+                onboardingViewModel.uploadImage(key, stream)
             }
         }
     }
-    when(val s = onboardingViewModel.imageUiState) {
+    when(val s = uploads.uploads.get(key)) {
         is ImageState.Loading -> {
             imageUri = R.drawable.loading_img
         }

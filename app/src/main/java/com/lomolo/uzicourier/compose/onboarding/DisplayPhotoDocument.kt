@@ -16,6 +16,7 @@ fun DisplayPhotoDocument(
 ) {
     UploadDocumentScreen(
         onboardingViewModel = onboardingViewModel,
-        modifier = modifier
+        modifier = modifier,
+        key = "DP"
     )
 }

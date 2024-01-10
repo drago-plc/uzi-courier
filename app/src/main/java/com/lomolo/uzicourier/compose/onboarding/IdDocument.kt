@@ -16,6 +16,7 @@ fun IdDocument(
 ) {
     UploadDocumentScreen(
         modifier = modifier,
-        onboardingViewModel = onboardingViewModel
+        onboardingViewModel = onboardingViewModel,
+        key = "ID"
     )
 }

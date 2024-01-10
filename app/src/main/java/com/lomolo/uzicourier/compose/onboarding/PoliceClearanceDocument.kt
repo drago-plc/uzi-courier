@@ -16,6 +16,7 @@ fun PoliceClearanceDocument(
 ) {
     UploadDocumentScreen(
         modifier = modifier,
-        onboardingViewModel = onboardingViewModel
+        onboardingViewModel = onboardingViewModel,
+        key = "PC"
     )
 }

@@ -9,9 +9,14 @@ import com.apollographql.apollo3.exception.ApolloException
 import com.lomolo.uzicourier.GetCourierDocumentsQuery
 import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.network.UziRestApiServiceInterface
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.internal.toImmutableMap
 import java.io.IOException
 import java.io.InputStream
 
@@ -19,8 +24,9 @@ class OnboardingViewModel(
     private val uziGqlApiRepository: UziGqlApiInterface,
     private val uziRestApiService: UziRestApiServiceInterface
 ): ViewModel() {
-    var imageUiState: ImageState by mutableStateOf(ImageState.Success())
-        private set
+    private val _imageUploads = MutableStateFlow(ImageUploads())
+    val imageUploadsUiState: StateFlow<ImageUploads> = _imageUploads.asStateFlow()
+
     var getCourierDocumentsUiState: GetCourierDocumentsState by mutableStateOf(GetCourierDocumentsState.Success(listOf()))
         private set
 
@@ -36,32 +42,35 @@ class OnboardingViewModel(
         }
     }
 
-    fun createCourierUpload() {
-        imageUiState = ImageState.Loading
-        viewModelScope.launch {
-            imageUiState = try {
-                ImageState.Success()
-            } catch(e: ApolloException) {
-                e.printStackTrace()
-                ImageState.Error(e.message)
-            }
-        }
+    fun createCourierUpload(key: String) {
     }
 
-    fun uploadImage(stream: InputStream) {
+    fun uploadImage(key: String, stream: InputStream) {
         val request = stream.readBytes().toRequestBody()
         val filePart = MultipartBody.Part.createFormData(
             "file",
             "photo_${System.currentTimeMillis()}.jpg",
             request
         )
-        imageUiState = ImageState.Loading
+        _imageUploads.update {
+            val uplds = it.uploads.toMutableMap()
+            uplds.set(key, ImageState.Loading)
+            it.copy(uploads = uplds.toImmutableMap())
+        }
         viewModelScope.launch {
-            imageUiState = try {
+            try {
                 val res = uziRestApiService.uploadImage(filePart)
-                ImageState.Success(res.imageUri)
+                _imageUploads.update {
+                    val uplds = it.uploads.toMutableMap()
+                    uplds.set(key, ImageState.Success(res.imageUri))
+                    it.copy(uploads = uplds.toImmutableMap())
+                }
             } catch(e: IOException) {
-                ImageState.Error(e.message)
+                _imageUploads.update {
+                    val uplds = it.uploads.toMutableMap()
+                    uplds.set(key, ImageState.Error(e.message))
+                    it.copy(uploads = uplds.toImmutableMap())
+                }
             }
         }
     }
@@ -72,8 +81,13 @@ interface ImageState {
     data object Loading: ImageState
     data class Error(val message: String?): ImageState
 }
+
 interface GetCourierDocumentsState {
     data class Success(val data: List<GetCourierDocumentsQuery.GetCourierDocument>): GetCourierDocumentsState
     data object Loading: GetCourierDocumentsState
     data class Error(val message: String?): GetCourierDocumentsState
 }
+
+data class ImageUploads(
+    val uploads: Map<String, ImageState> = mapOf()
+)
