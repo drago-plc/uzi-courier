@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo3.exception.ApolloException
+import com.lomolo.uzicourier.CreateCourierDocumentMutation
 import com.lomolo.uzicourier.GetCourierDocumentsQuery
 import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.network.UziRestApiServiceInterface
@@ -28,6 +29,9 @@ class OnboardingViewModel(
     private val _imageUploads = MutableStateFlow(ImageUploads())
     val imageUploadsUiState: StateFlow<ImageUploads> = _imageUploads.asStateFlow()
 
+    private val _createDocument = MutableStateFlow(CreateDocumentsState())
+    val createDocumentUiState: StateFlow<CreateDocumentsState> = _createDocument.asStateFlow()
+
     var getCourierDocumentsUiState: GetCourierDocumentsState by mutableStateOf(GetCourierDocumentsState.Success(listOf()))
         private set
 
@@ -43,7 +47,29 @@ class OnboardingViewModel(
         }
     }
 
-    fun createCourierUpload(key: String, uri: String) {
+    fun createCourierUpload(type: UploadFile, uri: String) {
+        _createDocument.update {
+            val createDoc = it.state.toMutableMap()
+            createDoc[type.toString()] = CreateCourierDocumentState.Loading
+            it.copy(state = createDoc.toImmutableMap())
+        }
+        viewModelScope.launch {
+            try {
+                val res = uziGqlApiRepository.createCourierDocument(type = type, uri = uri).dataOrThrow()
+                _createDocument.update {
+                    val createDoc = it.state.toMutableMap()
+                    createDoc[type.toString()] = CreateCourierDocumentState.Success(res.createCourierDocument)
+                    it.copy(state = createDoc.toImmutableMap())
+                }
+            } catch(e: ApolloException) {
+                _createDocument.update {
+                    val createDoc = it.state.toMutableMap()
+                    createDoc[type.toString()] = CreateCourierDocumentState.Error(e.message)
+                    it.copy(state = createDoc.toImmutableMap())
+                }
+
+            }
+        }
     }
 
     fun uploadImage(key: UploadFile, stream: InputStream) {
@@ -91,4 +117,14 @@ interface GetCourierDocumentsState {
 
 data class ImageUploads(
     val uploads: Map<String, ImageState> = mapOf()
+)
+
+interface CreateCourierDocumentState {
+    data class Success(val success: Boolean): CreateCourierDocumentState
+    data object Loading: CreateCourierDocumentState
+    data class Error(val message: String?): CreateCourierDocumentState
+}
+
+data class CreateDocumentsState(
+    val state: Map<String, CreateCourierDocumentState> = mapOf()
 )

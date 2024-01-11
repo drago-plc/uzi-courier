@@ -1,5 +1,7 @@
 package com.lomolo.uzicourier.compose.navigation.graphs
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,8 +20,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.lomolo.uzicourier.R
 import com.lomolo.uzicourier.compose.BottomBar
+import com.lomolo.uzicourier.compose.RetryErrorScreen
 import com.lomolo.uzicourier.compose.TopBar
+import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.navigation.Navigation
+import com.lomolo.uzicourier.compose.onboarding.CreateCourierDocumentState
+import com.lomolo.uzicourier.compose.onboarding.CreateDocumentsState
 import com.lomolo.uzicourier.compose.onboarding.DisplayDocumentDestination
 import com.lomolo.uzicourier.compose.onboarding.DisplayPhotoDocument
 import com.lomolo.uzicourier.compose.onboarding.IdDocument
@@ -41,8 +47,11 @@ object OnboardingGraph: Navigation {
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.onboarding(
     navController: NavHostController,
-    onboardingViewModel: OnboardingViewModel
+    onboardingViewModel: OnboardingViewModel,
+    createDocumentUiState: CreateDocumentsState
 ) {
+    val documentCreateState = createDocumentUiState.state
+
     navigation(
         startDestination = OnboardingDestination.route,
         route = OnboardingGraph.route
@@ -67,18 +76,38 @@ fun NavGraphBuilder.onboarding(
                     )
                 },
                 bottomBar = {
-                    BottomBar {
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(48.dp)
-                                .padding(start = 8.dp, end = 8.dp),
-                            onClick = { /*TODO*/ },
-                            shape = MaterialTheme.shapes.small
-                        ) {
-                            Text(
-                                text = stringResource(R.string.submit)
-                            )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp, end = 8.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        BottomBar {
+                            when(val s = documentCreateState[UploadFile.DP.toString()]) {
+                                CreateCourierDocumentState.Loading -> {
+                                    Loader()
+                                }
+                                is CreateCourierDocumentState.Error -> {
+                                    Text(
+                                        text = stringResource(id = R.string.not_your_fault_err),
+                                        color = MaterialTheme.colorScheme.error,
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                }
+                                else -> {
+                                    Button(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(48.dp),
+                                        onClick = { /*TODO*/ },
+                                        shape = MaterialTheme.shapes.small
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.submit)
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -106,18 +135,38 @@ fun NavGraphBuilder.onboarding(
                     )
                 },
                 bottomBar = {
-                    BottomBar {
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(48.dp)
-                                .padding(start = 8.dp, end = 8.dp),
-                            onClick = { /*TODO*/ },
-                            shape = MaterialTheme.shapes.small
-                        ) {
-                            Text(
-                                text = stringResource(R.string.submit)
-                            )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp, end = 8.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        BottomBar {
+                            when(val s = documentCreateState[UploadFile.PC.toString()]) {
+                                CreateCourierDocumentState.Loading -> {
+                                    Loader()
+                                }
+                                is CreateCourierDocumentState.Error -> {
+                                    Text(
+                                        text = stringResource(id = R.string.not_your_fault_err),
+                                        color = MaterialTheme.colorScheme.error,
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                }
+                                else -> {
+                                    Button(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(48.dp),
+                                        onClick = { /*TODO*/ },
+                                        shape = MaterialTheme.shapes.small
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.submit)
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -145,18 +194,38 @@ fun NavGraphBuilder.onboarding(
                     )
                 },
                 bottomBar = {
-                    BottomBar {
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(48.dp)
-                                .padding(start = 8.dp, end = 8.dp),
-                            onClick = { /*TODO*/ },
-                            shape = MaterialTheme.shapes.small
-                        ) {
-                            Text(
-                                text = stringResource(R.string.submit)
-                            )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp, end = 8.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        BottomBar {
+                            when(val s = documentCreateState[UploadFile.ID.toString()]) {
+                                CreateCourierDocumentState.Loading -> {
+                                    Loader()
+                                }
+                                is CreateCourierDocumentState.Error -> {
+                                    Text(
+                                        text = stringResource(id = R.string.not_your_fault_err),
+                                        color = MaterialTheme.colorScheme.error,
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                }
+                                else -> {
+                                    Button(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(48.dp),
+                                        onClick = { /*TODO*/ },
+                                        shape = MaterialTheme.shapes.small
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.submit)
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -184,18 +253,38 @@ fun NavGraphBuilder.onboarding(
                     )
                 },
                 bottomBar = {
-                    BottomBar {
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(48.dp)
-                                .padding(start = 8.dp, end = 8.dp),
-                            onClick = { /*TODO*/ },
-                            shape = MaterialTheme.shapes.small
-                        ) {
-                            Text(
-                                text = stringResource(R.string.submit)
-                            )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp, end = 8.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        BottomBar {
+                            when(val s = documentCreateState[UploadFile.MCR.toString()]) {
+                                CreateCourierDocumentState.Loading -> {
+                                    Loader()
+                                }
+                                is CreateCourierDocumentState.Error -> {
+                                    Text(
+                                        text = stringResource(id = R.string.not_your_fault_err),
+                                        color = MaterialTheme.colorScheme.error,
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                }
+                                else -> {
+                                    Button(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(48.dp),
+                                        onClick = { /*TODO*/ },
+                                        shape = MaterialTheme.shapes.small
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.submit)
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
