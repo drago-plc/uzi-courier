@@ -133,7 +133,6 @@ class SessionViewModel(
                 )
                 SignInUiState.Success.also { cb() }
             } catch(e: Exception) {
-                println(e)
                 SignInUiState.Error(e.localizedMessage)
             }
         }

@@ -31,6 +31,7 @@ import com.lomolo.uzicourier.compose.onboarding.OnboardingScreen
 import com.lomolo.uzicourier.compose.onboarding.OnboardingViewModel
 import com.lomolo.uzicourier.compose.onboarding.PoliceClearanceDocument
 import com.lomolo.uzicourier.compose.onboarding.PoliceClearanceDocumentDestination
+import com.lomolo.uzicourier.type.UploadFile
 
 object OnboardingGraph: Navigation {
     override val route = "graph/onboarding"
@@ -87,7 +88,8 @@ fun NavGraphBuilder.onboarding(
                         .padding(innerPadding)
                 ) {
                     DisplayPhotoDocument(
-                        onboardingViewModel = onboardingViewModel
+                        onboardingViewModel = onboardingViewModel,
+                        type = UploadFile.DP
                     )
                 }
             }
@@ -125,7 +127,8 @@ fun NavGraphBuilder.onboarding(
                         .padding(innerPadding)
                 ) {
                     PoliceClearanceDocument(
-                        onboardingViewModel = onboardingViewModel
+                        onboardingViewModel = onboardingViewModel,
+                        type = UploadFile.PC
                     )
                 }
             }
@@ -163,7 +166,8 @@ fun NavGraphBuilder.onboarding(
                         .padding(innerPadding)
                 ) {
                     IdDocument(
-                        onboardingViewModel = onboardingViewModel
+                        onboardingViewModel = onboardingViewModel,
+                        type = UploadFile.ID
                     )
                 }
             }
@@ -201,7 +205,8 @@ fun NavGraphBuilder.onboarding(
                         .padding(innerPadding)
                 ) {
                     MRDocument(
-                        onboardingViewModel = onboardingViewModel
+                        onboardingViewModel = onboardingViewModel,
+                        type = UploadFile.MCR
                     )
                 }
             }

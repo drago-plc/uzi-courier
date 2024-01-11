@@ -1,0 +1,8 @@
+mutation CreateCourierDocument($uri: String! $type: UploadFile!) {
+    createCourierDocument(
+        input: {
+            uri: $uri
+            type:$type
+        }
+    )
+}

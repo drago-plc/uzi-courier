@@ -3,6 +3,7 @@ package com.lomolo.uzicourier.compose.onboarding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.lomolo.uzicourier.compose.navigation.Navigation
+import com.lomolo.uzicourier.type.UploadFile
 
 object PoliceClearanceDocumentDestination: Navigation {
     override val route = "police_clearance_doc"
@@ -12,11 +13,12 @@ object PoliceClearanceDocumentDestination: Navigation {
 @Composable
 fun PoliceClearanceDocument(
     modifier: Modifier = Modifier,
-    onboardingViewModel: OnboardingViewModel
+    onboardingViewModel: OnboardingViewModel,
+    type: UploadFile
 ) {
     UploadDocumentScreen(
         modifier = modifier,
         onboardingViewModel = onboardingViewModel,
-        key = "PC"
+        type = type
     )
 }

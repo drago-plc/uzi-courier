@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.lomolo.uzicourier.R
+import com.lomolo.uzicourier.type.UploadFile
 import kotlinx.coroutines.launch
 
 @Composable
@@ -28,7 +29,7 @@ fun UploadDocumentScreen(
     modifier: Modifier = Modifier,
     text: @Composable () -> Unit? = {},
     onboardingViewModel: OnboardingViewModel,
-    key: String
+    type: UploadFile
 ) {
     val uploads by onboardingViewModel.imageUploadsUiState.collectAsState()
     var uploadError: String? = null
@@ -41,11 +42,11 @@ fun UploadDocumentScreen(
         if (it != null) {
             val stream = context.contentResolver.openInputStream(it)
             if (stream != null) {
-                onboardingViewModel.uploadImage(key, stream)
+                onboardingViewModel.uploadImage(type, stream)
             }
         }
     }
-    when(val s = uploads.uploads.get(key)) {
+    when(val s = uploads.uploads.get(type.toString())) {
         is ImageState.Loading -> {
             imageUri = R.drawable.loading_img
         }

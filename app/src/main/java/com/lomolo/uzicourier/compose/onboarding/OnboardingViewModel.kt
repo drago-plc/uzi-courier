@@ -9,6 +9,7 @@ import com.apollographql.apollo3.exception.ApolloException
 import com.lomolo.uzicourier.GetCourierDocumentsQuery
 import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.network.UziRestApiServiceInterface
+import com.lomolo.uzicourier.type.UploadFile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,19 +43,19 @@ class OnboardingViewModel(
         }
     }
 
-    fun createCourierUpload(key: String) {
+    fun createCourierUpload(key: String, uri: String) {
     }
 
-    fun uploadImage(key: String, stream: InputStream) {
+    fun uploadImage(key: UploadFile, stream: InputStream) {
         val request = stream.readBytes().toRequestBody()
         val filePart = MultipartBody.Part.createFormData(
             "file",
-            "photo_${System.currentTimeMillis()}.jpg",
+            "${key}_${System.currentTimeMillis()}.jpg",
             request
         )
         _imageUploads.update {
             val uplds = it.uploads.toMutableMap()
-            uplds.set(key, ImageState.Loading)
+            uplds.set(key.toString(), ImageState.Loading)
             it.copy(uploads = uplds.toImmutableMap())
         }
         viewModelScope.launch {
@@ -62,13 +63,13 @@ class OnboardingViewModel(
                 val res = uziRestApiService.uploadImage(filePart)
                 _imageUploads.update {
                     val uplds = it.uploads.toMutableMap()
-                    uplds.set(key, ImageState.Success(res.imageUri))
+                    uplds.set(key.toString(), ImageState.Success(res.imageUri))
                     it.copy(uploads = uplds.toImmutableMap())
                 }
             } catch(e: IOException) {
                 _imageUploads.update {
                     val uplds = it.uploads.toMutableMap()
-                    uplds.set(key, ImageState.Error(e.message))
+                    uplds.set(key.toString(), ImageState.Error(e.message))
                     it.copy(uploads = uplds.toImmutableMap())
                 }
             }
