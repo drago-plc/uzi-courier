@@ -78,8 +78,7 @@ fun NavGraphBuilder.onboarding(
                 bottomBar = {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 8.dp, end = 8.dp),
+                            .fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         BottomBar {
@@ -98,7 +97,8 @@ fun NavGraphBuilder.onboarding(
                                     Button(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .height(48.dp),
+                                            .height(48.dp)
+                                            .padding(start = 8.dp, end = 8.dp),
                                         onClick = { /*TODO*/ },
                                         shape = MaterialTheme.shapes.small
                                     ) {
@@ -137,8 +137,7 @@ fun NavGraphBuilder.onboarding(
                 bottomBar = {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 8.dp, end = 8.dp),
+                            .fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         BottomBar {
@@ -157,7 +156,8 @@ fun NavGraphBuilder.onboarding(
                                     Button(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .height(48.dp),
+                                            .height(48.dp)
+                                            .padding(start = 8.dp, end = 8.dp),
                                         onClick = { /*TODO*/ },
                                         shape = MaterialTheme.shapes.small
                                     ) {
@@ -196,8 +196,7 @@ fun NavGraphBuilder.onboarding(
                 bottomBar = {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 8.dp, end = 8.dp),
+                            .fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         BottomBar {
@@ -216,7 +215,8 @@ fun NavGraphBuilder.onboarding(
                                     Button(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .height(48.dp),
+                                            .height(48.dp)
+                                            .padding(start = 8.dp, end = 8.dp),
                                         onClick = { /*TODO*/ },
                                         shape = MaterialTheme.shapes.small
                                     ) {
@@ -255,8 +255,7 @@ fun NavGraphBuilder.onboarding(
                 bottomBar = {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 8.dp, end = 8.dp),
+                            .fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         BottomBar {
@@ -275,7 +274,8 @@ fun NavGraphBuilder.onboarding(
                                     Button(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .height(48.dp),
+                                            .height(48.dp)
+                                            .padding(start = 8.dp, end = 8.dp),
                                         onClick = { /*TODO*/ },
                                         shape = MaterialTheme.shapes.small
                                     ) {
