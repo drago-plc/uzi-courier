@@ -20,7 +20,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.lomolo.uzicourier.R
 import com.lomolo.uzicourier.compose.BottomBar
-import com.lomolo.uzicourier.compose.RetryErrorScreen
 import com.lomolo.uzicourier.compose.TopBar
 import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.navigation.Navigation
