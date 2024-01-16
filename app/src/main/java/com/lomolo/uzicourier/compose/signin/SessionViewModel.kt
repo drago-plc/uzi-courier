@@ -139,7 +139,7 @@ class SessionViewModel(
     }
 
     companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
+        private const val TIMEOUT_MILLIS = 2_000L
     }
 }
 

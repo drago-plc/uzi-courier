@@ -37,9 +37,9 @@ import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.navigation.Navigation
 import com.lomolo.uzicourier.compose.onboarding.OnboardingDestination
 import com.lomolo.uzicourier.compose.signin.GetStarted
-import com.lomolo.uzicourier.compose.signin.SessionViewModel
 import com.lomolo.uzicourier.compose.signin.UserNameDestination
 import com.lomolo.uzicourier.model.CourierStatus
+import com.lomolo.uzicourier.model.Session
 
 object HomeScreenDestination: Navigation {
     override val route = "home"
@@ -52,7 +52,7 @@ fun HomeScreen(
     mainViewModel: MainViewModel = viewModel(),
     onGetStartedClick: () -> Unit = {},
     onNavigateTo: (String) -> Unit = {},
-    sessionViewModel: SessionViewModel
+    session: Session
 ) {
     val deviceDetails by mainViewModel.deviceDetailsUiState.collectAsState()
 
@@ -74,7 +74,7 @@ fun HomeScreen(
                     deviceDetails = deviceDetails,
                     onGetStartedClick = onGetStartedClick,
                     onNavigateTo = onNavigateTo,
-                    sessionViewModel = sessionViewModel
+                    session = session
                 )
             }
         }
@@ -87,10 +87,10 @@ private fun HomeSuccessScreen(
     mainViewModel: MainViewModel,
     deviceDetails: DeviceDetails,
     onGetStartedClick: () -> Unit,
+    session: Session,
     onNavigateTo: (String) -> Unit = {},
-    sessionViewModel: SessionViewModel
 ) {
-    val session by sessionViewModel.sessionUiState.collectAsState()
+    println(session)
     val isAuthed = session.token.isNotBlank()
     val isOnboarding = session.onboarding
     val courierStatus = session.courierStatus

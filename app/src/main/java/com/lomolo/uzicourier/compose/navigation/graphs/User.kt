@@ -78,7 +78,6 @@ fun NameScreen(
                 onNavigateTo = {
                     navController.navigate(it) {
                         popUpTo(it) {
-                            inclusive = true
                             saveState = true
                         }
                     }
@@ -117,8 +116,7 @@ fun PhoneScreen(
                 onNavigateTo = {
                     navController.navigate(it) {
                         popUpTo(it) {
-                            inclusive = true
-                            saveState = false
+                            saveState = true
                         }
                     }
                 }
