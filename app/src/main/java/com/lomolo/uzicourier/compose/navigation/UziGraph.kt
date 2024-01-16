@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -30,8 +28,6 @@ fun UziCourierNavHost(
     sessionViewModel: SessionViewModel = viewModel(factory = UziViewModelProvider.Factory),
     onboardingViewModel: OnboardingViewModel = viewModel(factory = UziViewModelProvider.Factory)
 ) {
-    val session by sessionViewModel.sessionUiState.collectAsState()
-
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -45,7 +41,7 @@ fun UziCourierNavHost(
                 ) {
                     HomeScreen(
                         mainViewModel = mainViewModel,
-                        session = session,
+                        sessionViewModel = sessionViewModel,
                         onGetStartedClick = { navController.navigate(UserGraphDestination.route) },
                         onNavigateTo = {
                             navController.navigate(it) {

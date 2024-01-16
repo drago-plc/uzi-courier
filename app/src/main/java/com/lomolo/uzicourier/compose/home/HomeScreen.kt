@@ -37,9 +37,9 @@ import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.navigation.Navigation
 import com.lomolo.uzicourier.compose.onboarding.OnboardingDestination
 import com.lomolo.uzicourier.compose.signin.GetStarted
+import com.lomolo.uzicourier.compose.signin.SessionViewModel
 import com.lomolo.uzicourier.compose.signin.UserNameDestination
 import com.lomolo.uzicourier.model.CourierStatus
-import com.lomolo.uzicourier.model.Session
 
 object HomeScreenDestination: Navigation {
     override val route = "home"
@@ -50,9 +50,9 @@ object HomeScreenDestination: Navigation {
 fun HomeScreen(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel = viewModel(),
-    session: Session,
     onGetStartedClick: () -> Unit = {},
-    onNavigateTo: (String) -> Unit = {}
+    onNavigateTo: (String) -> Unit = {},
+    sessionViewModel: SessionViewModel
 ) {
     val deviceDetails by mainViewModel.deviceDetailsUiState.collectAsState()
 
@@ -72,9 +72,9 @@ fun HomeScreen(
                     modifier = Modifier.matchParentSize(),
                     mainViewModel = mainViewModel,
                     deviceDetails = deviceDetails,
-                    session = session,
                     onGetStartedClick = onGetStartedClick,
-                    onNavigateTo = onNavigateTo
+                    onNavigateTo = onNavigateTo,
+                    sessionViewModel = sessionViewModel
                 )
             }
         }
@@ -86,10 +86,11 @@ private fun HomeSuccessScreen(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel,
     deviceDetails: DeviceDetails,
-    session: Session,
     onGetStartedClick: () -> Unit,
-    onNavigateTo: (String) -> Unit = {}
+    onNavigateTo: (String) -> Unit = {},
+    sessionViewModel: SessionViewModel
 ) {
+    val session by sessionViewModel.sessionUiState.collectAsState()
     val isAuthed = session.token.isNotBlank()
     val isOnboarding = session.onboarding
     val courierStatus = session.courierStatus
@@ -194,7 +195,7 @@ private fun HomeErrorScreen(
         ) {
             Text(
                 text = stringResource(R.string.retry),
-                style = MaterialTheme.typography.labelSmall
+                style = MaterialTheme.typography.labelMedium
             )
         }
     }

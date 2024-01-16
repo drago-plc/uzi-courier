@@ -49,7 +49,6 @@ fun Phone(
     val signInUiState by sessionViewModel.signInInput.collectAsState()
     val isPhoneValid = sessionViewModel.isPhoneValid(signInUiState)
     val deviceUiState by mainViewModel.deviceDetailsUiState.collectAsState()
-    val sessionUiState by sessionViewModel.sessionUiState.collectAsState()
 
     Column(
         modifier = modifier
@@ -97,17 +96,13 @@ fun Phone(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            when (val s = sessionViewModel.signInUiState) {
+            when (sessionViewModel.signInUiState) {
                 is SignInUiState.Success -> {
                     Button(
                         onClick = {
                             if (isPhoneValid)
                                 sessionViewModel.signIn {
-                                    if (sessionUiState.onboarding) {
-                                        onNavigateTo(UserNameDestination.route)
-                                    } else {
-                                        onNavigateTo(HomeScreenDestination.route)
-                                    }
+                                    onNavigateTo(HomeScreenDestination.route)
                                 }
                         },
                         modifier = Modifier
@@ -135,11 +130,7 @@ fun Phone(
                             onClick = {
                                 if (isPhoneValid)
                                     sessionViewModel.signIn {
-                                        if (sessionUiState.onboarding) {
-                                            onNavigateTo(UserNameDestination.route)
-                                        } else {
-                                            onNavigateTo(HomeScreenDestination.route)
-                                        }
+                                        onNavigateTo(HomeScreenDestination.route)
                                     }
                             },
                             modifier = Modifier
