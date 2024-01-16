@@ -11,6 +11,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,6 +32,8 @@ import com.lomolo.uzicourier.compose.onboarding.DisplayDocumentDestination
 import com.lomolo.uzicourier.compose.onboarding.DisplayPhotoDocument
 import com.lomolo.uzicourier.compose.onboarding.IdDocument
 import com.lomolo.uzicourier.compose.onboarding.IdDocumentDestination
+import com.lomolo.uzicourier.compose.onboarding.ImageState
+import com.lomolo.uzicourier.compose.onboarding.ImageUploads
 import com.lomolo.uzicourier.compose.onboarding.MRDocument
 import com.lomolo.uzicourier.compose.onboarding.MRDocumentDestination
 import com.lomolo.uzicourier.compose.onboarding.OnboardingDestination
@@ -47,10 +52,7 @@ object OnboardingGraph: Navigation {
 fun NavGraphBuilder.onboarding(
     navController: NavHostController,
     onboardingViewModel: OnboardingViewModel,
-    createDocumentUiState: CreateDocumentsState
 ) {
-    val documentCreateState = createDocumentUiState.state
-
     navigation(
         startDestination = OnboardingDestination.route,
         route = OnboardingGraph.route
@@ -75,40 +77,10 @@ fun NavGraphBuilder.onboarding(
                     )
                 },
                 bottomBar = {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        BottomBar {
-                            when(val s = documentCreateState[UploadFile.DP.toString()]) {
-                                CreateCourierDocumentState.Loading -> {
-                                    Loader()
-                                }
-                                is CreateCourierDocumentState.Error -> {
-                                    Text(
-                                        text = stringResource(id = R.string.not_your_fault_err),
-                                        color = MaterialTheme.colorScheme.error,
-                                        style = MaterialTheme.typography.labelSmall
-                                    )
-                                }
-                                else -> {
-                                    Button(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(48.dp)
-                                            .padding(start = 8.dp, end = 8.dp),
-                                        onClick = { /*TODO*/ },
-                                        shape = MaterialTheme.shapes.small
-                                    ) {
-                                        Text(
-                                            text = stringResource(R.string.submit)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    BottomBar(
+                        type = UploadFile.DP,
+                        onboardingViewModel = onboardingViewModel
+                    )
                 }
             ) {innerPadding ->
                 Surface(
@@ -134,40 +106,10 @@ fun NavGraphBuilder.onboarding(
                     )
                 },
                 bottomBar = {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        BottomBar {
-                            when(val s = documentCreateState[UploadFile.PC.toString()]) {
-                                CreateCourierDocumentState.Loading -> {
-                                    Loader()
-                                }
-                                is CreateCourierDocumentState.Error -> {
-                                    Text(
-                                        text = stringResource(id = R.string.not_your_fault_err),
-                                        color = MaterialTheme.colorScheme.error,
-                                        style = MaterialTheme.typography.labelSmall
-                                    )
-                                }
-                                else -> {
-                                    Button(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(48.dp)
-                                            .padding(start = 8.dp, end = 8.dp),
-                                        onClick = { /*TODO*/ },
-                                        shape = MaterialTheme.shapes.small
-                                    ) {
-                                        Text(
-                                            text = stringResource(R.string.submit)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    BottomBar(
+                        type = UploadFile.PC,
+                        onboardingViewModel = onboardingViewModel
+                    )
                 }
             ) {innerPadding ->
                 Surface(
@@ -193,40 +135,10 @@ fun NavGraphBuilder.onboarding(
                     )
                 },
                 bottomBar = {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        BottomBar {
-                            when(val s = documentCreateState[UploadFile.ID.toString()]) {
-                                CreateCourierDocumentState.Loading -> {
-                                    Loader()
-                                }
-                                is CreateCourierDocumentState.Error -> {
-                                    Text(
-                                        text = stringResource(id = R.string.not_your_fault_err),
-                                        color = MaterialTheme.colorScheme.error,
-                                        style = MaterialTheme.typography.labelSmall
-                                    )
-                                }
-                                else -> {
-                                    Button(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(48.dp)
-                                            .padding(start = 8.dp, end = 8.dp),
-                                        onClick = { /*TODO*/ },
-                                        shape = MaterialTheme.shapes.small
-                                    ) {
-                                        Text(
-                                            text = stringResource(R.string.submit)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    BottomBar(
+                        type = UploadFile.ID,
+                        onboardingViewModel = onboardingViewModel
+                    )
                 }
             ) {innerPadding ->
                 Surface(
@@ -252,40 +164,10 @@ fun NavGraphBuilder.onboarding(
                     )
                 },
                 bottomBar = {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        BottomBar {
-                            when(val s = documentCreateState[UploadFile.MCR.toString()]) {
-                                CreateCourierDocumentState.Loading -> {
-                                    Loader()
-                                }
-                                is CreateCourierDocumentState.Error -> {
-                                    Text(
-                                        text = stringResource(id = R.string.not_your_fault_err),
-                                        color = MaterialTheme.colorScheme.error,
-                                        style = MaterialTheme.typography.labelSmall
-                                    )
-                                }
-                                else -> {
-                                    Button(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(48.dp)
-                                            .padding(start = 8.dp, end = 8.dp),
-                                        onClick = { /*TODO*/ },
-                                        shape = MaterialTheme.shapes.small
-                                    ) {
-                                        Text(
-                                            text = stringResource(R.string.submit)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    BottomBar(
+                        type = UploadFile.MCR,
+                        onboardingViewModel = onboardingViewModel
+                    )
                 }
             ) {innerPadding ->
                 Surface(
@@ -296,6 +178,78 @@ fun NavGraphBuilder.onboarding(
                         onboardingViewModel = onboardingViewModel,
                         type = UploadFile.MCR
                     )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun BottomBar(
+    modifier: Modifier = Modifier,
+    onboardingViewModel: OnboardingViewModel,
+    type: UploadFile
+) {
+    val imageUploads by onboardingViewModel.imageUploadsUiState.collectAsState()
+    val createDocumentUiState by onboardingViewModel.createDocumentUiState.collectAsState()
+    val uri = when(val s = imageUploads.uploads[type.toString()]) {
+        is ImageState.Success -> {
+            s.uri
+        }
+        else -> {null}
+    }
+    val documentState = createDocumentUiState.state[type.toString()]
+
+    BottomBar {
+        Row(
+            modifier = modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            when(documentState) {
+                is CreateCourierDocumentState.Loading -> {
+                    Loader()
+                }
+                is CreateCourierDocumentState.Error -> {
+                    Text(
+                        text = stringResource(id = R.string.not_your_fault_err),
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                            .padding(start = 8.dp, end = 8.dp),
+                        onClick = {
+                            onboardingViewModel.createCourierUpload(type, uri!!)
+                        },
+                        shape = MaterialTheme.shapes.small
+                    ) {
+                        Text(
+                            text = stringResource(R.string.retry),
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
+                }
+                else -> {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                            .padding(start = 8.dp, end = 8.dp),
+                        onClick = {
+                            if (uri != null && documentState !is CreateCourierDocumentState.Loading) {
+                                onboardingViewModel.createCourierUpload(type, uri)
+                            }
+                        },
+                        shape = MaterialTheme.shapes.small
+                    ) {
+                        Text(
+                            text = stringResource(R.string.submit),
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
                 }
             }
         }

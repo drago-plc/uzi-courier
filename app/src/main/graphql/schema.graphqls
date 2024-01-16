@@ -79,6 +79,12 @@ type Route {
 }
 
 type Session {
+  id: UUID!
+
+  ip: String!
+
+  userAgent: String!
+
   token: String!
 
   isCourier: Boolean!
@@ -140,6 +146,16 @@ enum UploadFile {
   VI
 }
 
+enum UploadVerificationStatus {
+  VERIFYING
+
+  VERIFIED
+
+  REJECTED
+
+  ONBOARDING
+}
+
 type Uploads {
   ID: UUID!
 
@@ -147,7 +163,7 @@ type Uploads {
 
   uri: String
 
-  verified: Boolean!
+  verification: UploadVerificationStatus!
 
   courier_id: UUID
 

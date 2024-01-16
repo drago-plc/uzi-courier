@@ -31,7 +31,6 @@ fun UziCourierNavHost(
     onboardingViewModel: OnboardingViewModel = viewModel(factory = UziViewModelProvider.Factory)
 ) {
     val session by sessionViewModel.sessionUiState.collectAsState()
-    val createDocumentUiState by onboardingViewModel.createDocumentUiState.collectAsState()
 
     NavHost(
         modifier = modifier,
@@ -75,7 +74,6 @@ fun UziCourierNavHost(
         onboarding(
             navController = navController,
             onboardingViewModel = onboardingViewModel,
-            createDocumentUiState = createDocumentUiState
         )
     }
 }

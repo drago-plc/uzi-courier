@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo3.exception.ApolloException
-import com.lomolo.uzicourier.CreateCourierDocumentMutation
 import com.lomolo.uzicourier.GetCourierDocumentsQuery
 import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.network.UziRestApiServiceInterface
@@ -81,7 +80,7 @@ class OnboardingViewModel(
         )
         _imageUploads.update {
             val uplds = it.uploads.toMutableMap()
-            uplds.set(key.toString(), ImageState.Loading)
+            uplds[key.toString()] = ImageState.Loading
             it.copy(uploads = uplds.toImmutableMap())
         }
         viewModelScope.launch {
@@ -89,13 +88,13 @@ class OnboardingViewModel(
                 val res = uziRestApiService.uploadImage(filePart)
                 _imageUploads.update {
                     val uplds = it.uploads.toMutableMap()
-                    uplds.set(key.toString(), ImageState.Success(res.imageUri))
+                    uplds[key.toString()] = ImageState.Success(res.imageUri)
                     it.copy(uploads = uplds.toImmutableMap())
                 }
             } catch(e: IOException) {
                 _imageUploads.update {
                     val uplds = it.uploads.toMutableMap()
-                    uplds.set(key.toString(), ImageState.Error(e.message))
+                    uplds[key.toString()] = ImageState.Error(e.message)
                     it.copy(uploads = uplds.toImmutableMap())
                 }
             }

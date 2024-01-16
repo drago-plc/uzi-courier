@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface SessionInterface {
     fun getSession(): Flow<List<Session>>
     suspend fun signIn(input: SignIn)
-    suspend fun onboardUser(sessionId: Int, input: SignIn)
+    suspend fun onboardUser(sessionId: String, input: SignIn)
     suspend fun refreshSession(session: Session)
 }
 
@@ -43,7 +43,7 @@ class SessionRepository(
         sessionDao.updateSession(newSession)
     }
 
-    override suspend fun onboardUser(sessionId: Int, input: SignIn) {
+    override suspend fun onboardUser(sessionId: String, input: SignIn) {
         val res = uziRestApiService.onboardUser(input)
         val newSession = Session(
             id = sessionId,

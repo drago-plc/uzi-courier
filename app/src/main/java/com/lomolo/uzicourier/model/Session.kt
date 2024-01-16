@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "sessions")
 data class Session(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey val id: String = "",
     val token: String = "",
     val phone: String = "",
     val courierStatus: CourierStatus = CourierStatus.ONBOARDING,

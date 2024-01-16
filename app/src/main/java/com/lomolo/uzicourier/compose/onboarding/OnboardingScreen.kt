@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.twotone.CheckCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +25,7 @@ import com.lomolo.uzicourier.R
 import com.lomolo.uzicourier.compose.RetryErrorScreen
 import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.navigation.Navigation
+import com.lomolo.uzicourier.type.UploadVerificationStatus
 import kotlinx.coroutines.launch
 
 object OnboardingDestination: Navigation {
@@ -129,24 +131,81 @@ private fun RequiredDocuments(
         modifier = modifier
     ) {
         docs.forEach { doc ->
+            val document = GetDocumentData(courierDocs, doc.type)
+
             ListItem(
                 headlineContent = {
                     Text(
                         text = doc.name
                     )
                 },
+                supportingContent = {
+                    if (document?.verification == UploadVerificationStatus.REJECTED) {
+                        Text(
+                            text = "Previous submission rejected. Resubmit document for verification.",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                },
                 trailingContent = {
-                    Icon(
-                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = null
-                    )
+                    if (courierDocs.isNotEmpty()) {
+                        when(document?.verification) {
+                            UploadVerificationStatus.ONBOARDING -> {
+                                Icon(
+                                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                    contentDescription = null
+                                )
+                            }
+                            UploadVerificationStatus.VERIFYING -> {
+                                Text(
+                                    text = stringResource(R.string.verifying),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            }
+                            UploadVerificationStatus.VERIFIED -> {
+                                Icon(
+                                    Icons.TwoTone.CheckCircle,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            UploadVerificationStatus.REJECTED -> {
+                                Icon(
+                                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                    contentDescription = null
+                                )
+                            }
+                            else -> {
+                                Icon(
+                                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    } else {
+                        Icon(
+                            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = null
+                        )
+                    }
                 },
                 modifier = Modifier
                     .padding(8.dp)
                     .clickable {
-                        onNavigateTo(doc.route)
+                        println(document)
+                        val allowClick = (document == null) || (courierDocs.isEmpty()) || (document.verification.toString() == UploadVerificationStatus.REJECTED.toString() || document.verification == UploadVerificationStatus.ONBOARDING)
+                        if (allowClick) {
+                            onNavigateTo(doc.route)
+                        }
                     }
             )
         }
+    }
+}
+
+private fun GetDocumentData(docs: List<GetCourierDocumentsQuery.GetCourierDocument>, type: String): GetCourierDocumentsQuery.GetCourierDocument? {
+    return docs.find {
+        it.type == type
     }
 }

@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 
-private val lightColors = lightColorScheme(
+private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
     primaryContainer = md_theme_light_primaryContainer,
@@ -49,7 +49,7 @@ private val lightColors = lightColorScheme(
 )
 
 
-private val darkColors = darkColorScheme(
+private val DarkColors = darkColorScheme(
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
     primaryContainer = md_theme_dark_primaryContainer,
@@ -81,6 +81,7 @@ private val darkColors = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
+
 @Composable
 fun UziCourierTheme(
   useDarkTheme: Boolean = isSystemInDarkTheme(),
@@ -93,8 +94,8 @@ fun UziCourierTheme(
             val context = LocalContext.current
             if (useDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        useDarkTheme -> darkColors
-        else -> lightColors
+        useDarkTheme -> darkColorScheme()
+        else -> lightColorScheme()
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
