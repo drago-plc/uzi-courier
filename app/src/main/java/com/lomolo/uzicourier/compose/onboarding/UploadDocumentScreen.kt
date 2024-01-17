@@ -4,9 +4,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.lomolo.uzicourier.R
@@ -64,7 +66,6 @@ fun UploadDocumentScreen(
     Column(
         modifier = modifier
             .fillMaxSize(),
-        verticalArrangement = Arrangement.Center
     ) {
         text()
         AsyncImage(
@@ -76,9 +77,11 @@ fun UploadDocumentScreen(
             contentDescription = null,
             placeholder = painterResource(R.drawable.loading_img),
             error = painterResource(R.drawable.ic_broken_image),
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
+                .padding(top = 8.dp)
+                .size(400.dp)
                 .clickable {
                     scope.launch {
                         pickMedia.launch(

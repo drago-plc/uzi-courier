@@ -18,4 +18,5 @@
     <string name="lets_get_you_setup_subheading">We need the following document verified by us before you start working on Uzi.</string>
     <string name="submit">Submit</string>
     <string name="verifying">Verifying</string>
+    <string name="mcr_doc_text">You can submit a photo of your bike if you don\'t have a motorcycle registration. Final trip price will not account for fuel if you are using a bicycle for delivery.</string>
 </resources>
