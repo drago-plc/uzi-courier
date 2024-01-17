@@ -102,15 +102,6 @@ private fun HomeSuccessScreen(
         isAuthed && courierStatus == CourierStatus.ONBOARDING -> {
             onNavigateTo(OnboardingDestination.route)
         }
-        isAuthed && !isOnboarding -> {
-           DefaultHomeScreen(
-               modifier = modifier,
-               mainViewModel = mainViewModel,
-               deviceDetails = deviceDetails,
-               onGetStartedClick = onGetStartedClick,
-               isAuthed = isAuthed
-           )
-        }
         else -> {
             DefaultHomeScreen(
                modifier = modifier,
