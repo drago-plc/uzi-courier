@@ -18,5 +18,11 @@
     <string name="lets_get_you_setup_subheading">We need the following document verified by us before you start working on Uzi.</string>
     <string name="submit">Submit</string>
     <string name="verifying">Verifying</string>
-    <string name="mcr_doc_text">You can submit a photo of your bike if you don\'t have a motorcycle registration. Final trip price will not account for fuel if you are using a bicycle for delivery.</string>
+    <string name="mcr_doc_text">You can submit a photo of you with your bicycle if you don\'t have a motorcycle. Final trip price will not account for fuel if you are using a bicycle for delivery.</string>
+    <string name="mcr_reg_cert">Motorcycle registration certificate</string>
+    <string name="govt_id">Government issued ID</string>
+    <string name="pc_cert">Police clearance certificate</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="enter_your_details">Enter your details</string>
+    <string name="enter_your_phone">Enter your phone</string>
 </resources>

@@ -16,7 +16,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -28,13 +27,11 @@ import com.lomolo.uzicourier.compose.TopBar
 import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.navigation.Navigation
 import com.lomolo.uzicourier.compose.onboarding.CreateCourierDocumentState
-import com.lomolo.uzicourier.compose.onboarding.CreateDocumentsState
 import com.lomolo.uzicourier.compose.onboarding.DisplayDocumentDestination
 import com.lomolo.uzicourier.compose.onboarding.DisplayPhotoDocument
 import com.lomolo.uzicourier.compose.onboarding.IdDocument
 import com.lomolo.uzicourier.compose.onboarding.IdDocumentDestination
 import com.lomolo.uzicourier.compose.onboarding.ImageState
-import com.lomolo.uzicourier.compose.onboarding.ImageUploads
 import com.lomolo.uzicourier.compose.onboarding.MRDocument
 import com.lomolo.uzicourier.compose.onboarding.MRDocumentDestination
 import com.lomolo.uzicourier.compose.onboarding.OnboardingDestination
@@ -70,7 +67,7 @@ fun NavGraphBuilder.onboarding(
             Scaffold(
                 topBar = {
                     TopBar(
-                        title = DisplayDocumentDestination.title,
+                        title = stringResource(DisplayDocumentDestination.title),
                         canNavigateBack = true,
                         navigateBack = {
                             navController.popBackStack()
@@ -102,7 +99,7 @@ fun NavGraphBuilder.onboarding(
             Scaffold(
                 topBar = {
                     TopBar(
-                        title = PoliceClearanceDocumentDestination.title,
+                        title = stringResource(PoliceClearanceDocumentDestination.title),
                         canNavigateBack = true,
                         navigateBack = {
                             navController.popBackStack()
@@ -134,7 +131,7 @@ fun NavGraphBuilder.onboarding(
             Scaffold(
                 topBar = {
                     TopBar(
-                        title = IdDocumentDestination.title,
+                        title = stringResource(IdDocumentDestination.title),
                         canNavigateBack = true,
                         navigateBack = {
                             navController.popBackStack()
@@ -166,7 +163,7 @@ fun NavGraphBuilder.onboarding(
             Scaffold(
                 topBar = {
                     TopBar(
-                        title = MRDocumentDestination.title,
+                        title = stringResource(MRDocumentDestination.title),
                         canNavigateBack = true,
                         navigateBack = {
                             navController.popBackStack()
