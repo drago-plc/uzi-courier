@@ -43,7 +43,7 @@ private data class Doc(
 private val docs = listOf(
     Doc("Motorcycle Registration Certificate", type = "MCR", route = MRDocumentDestination.route),
     Doc("Profile Photo", true, type = "DP", route = DisplayDocumentDestination.route),
-    Doc("Police Clearance", true, type = "PC", route = PoliceClearanceDocumentDestination.route),
+    Doc("Police Clearance Certificate", true, type = "PC", route = PoliceClearanceDocumentDestination.route),
     Doc("Identification Document", true, type = "ID", route = IdDocumentDestination.route)
 )
 
