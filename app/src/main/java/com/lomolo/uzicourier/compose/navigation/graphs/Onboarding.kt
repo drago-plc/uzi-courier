@@ -79,7 +79,10 @@ fun NavGraphBuilder.onboarding(
                 bottomBar = {
                     BottomBar(
                         type = UploadFile.DP,
-                        onboardingViewModel = onboardingViewModel
+                        onboardingViewModel = onboardingViewModel,
+                        onNavigateUp = {
+                            navController.popBackStack()
+                        }
                     )
                 }
             ) {innerPadding ->
@@ -108,7 +111,10 @@ fun NavGraphBuilder.onboarding(
                 bottomBar = {
                     BottomBar(
                         type = UploadFile.PC,
-                        onboardingViewModel = onboardingViewModel
+                        onboardingViewModel = onboardingViewModel,
+                        onNavigateUp = {
+                            navController.popBackStack()
+                        }
                     )
                 }
             ) {innerPadding ->
@@ -137,7 +143,10 @@ fun NavGraphBuilder.onboarding(
                 bottomBar = {
                     BottomBar(
                         type = UploadFile.ID,
-                        onboardingViewModel = onboardingViewModel
+                        onboardingViewModel = onboardingViewModel,
+                        onNavigateUp = {
+                            navController.popBackStack()
+                        }
                     )
                 }
             ) {innerPadding ->
@@ -166,7 +175,10 @@ fun NavGraphBuilder.onboarding(
                 bottomBar = {
                     BottomBar(
                         type = UploadFile.MCR,
-                        onboardingViewModel = onboardingViewModel
+                        onboardingViewModel = onboardingViewModel,
+                        onNavigateUp = {
+                            navController.popBackStack()
+                        }
                     )
                 }
             ) {innerPadding ->
@@ -188,7 +200,8 @@ fun NavGraphBuilder.onboarding(
 private fun BottomBar(
     modifier: Modifier = Modifier,
     onboardingViewModel: OnboardingViewModel,
-    type: UploadFile
+    type: UploadFile,
+    onNavigateUp: () -> Unit = {}
 ) {
     val imageUploads by onboardingViewModel.imageUploadsUiState.collectAsState()
     val createDocumentUiState by onboardingViewModel.createDocumentUiState.collectAsState()
@@ -222,7 +235,9 @@ private fun BottomBar(
                             .height(48.dp)
                             .padding(start = 8.dp, end = 8.dp),
                         onClick = {
-                            onboardingViewModel.createCourierUpload(type, uri!!)
+                            onboardingViewModel.createCourierUpload(type, uri!!) {
+                                onNavigateUp()
+                            }
                         },
                         shape = MaterialTheme.shapes.small
                     ) {
@@ -240,7 +255,9 @@ private fun BottomBar(
                             .padding(start = 8.dp, end = 8.dp),
                         onClick = {
                             if (uri != null && documentState !is CreateCourierDocumentState.Loading) {
-                                onboardingViewModel.createCourierUpload(type, uri)
+                                onboardingViewModel.createCourierUpload(type, uri) {
+                                    onNavigateUp()
+                                }
                             }
                         },
                         shape = MaterialTheme.shapes.small

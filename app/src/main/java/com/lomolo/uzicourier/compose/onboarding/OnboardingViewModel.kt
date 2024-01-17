@@ -46,7 +46,7 @@ class OnboardingViewModel(
         }
     }
 
-    fun createCourierUpload(type: UploadFile, uri: String) {
+    fun createCourierUpload(type: UploadFile, uri: String, cb: () -> Unit = {}) {
         _createDocument.update {
             val createDoc = it.state.toMutableMap()
             createDoc[type.toString()] = CreateCourierDocumentState.Loading
@@ -59,7 +59,7 @@ class OnboardingViewModel(
                     val createDoc = it.state.toMutableMap()
                     createDoc[type.toString()] = CreateCourierDocumentState.Success(res.createCourierDocument)
                     it.copy(state = createDoc.toImmutableMap())
-                }
+                }.also { cb() }
             } catch(e: ApolloException) {
                 _createDocument.update {
                     val createDoc = it.state.toMutableMap()
