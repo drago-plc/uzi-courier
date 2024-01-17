@@ -23,8 +23,10 @@ import androidx.compose.ui.unit.dp
 import com.lomolo.uzicourier.GetCourierDocumentsQuery
 import com.lomolo.uzicourier.R
 import com.lomolo.uzicourier.compose.RetryErrorScreen
+import com.lomolo.uzicourier.compose.home.HomeScreenDestination
 import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.navigation.Navigation
+import com.lomolo.uzicourier.compose.signin.SessionViewModel
 import com.lomolo.uzicourier.type.UploadVerificationStatus
 import kotlinx.coroutines.launch
 
@@ -51,6 +53,7 @@ private val docs = listOf(
 fun OnboardingScreen(
     modifier: Modifier = Modifier,
     onboardingViewModel: OnboardingViewModel,
+    sessionViewModel: SessionViewModel,
     onNavigateTo: (String) -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
@@ -61,24 +64,30 @@ fun OnboardingScreen(
 
     when(val s = onboardingViewModel.getCourierDocumentsUiState) {
         is GetCourierDocumentsState.Success -> {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                Heading(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    heading = stringResource(R.string.let_s_get_you_setup),
-                    subHeading = stringResource(R.string.lets_get_you_setup_subheading)
-                )
-                RequiredDocuments(
-                    modifier = Modifier
-                        .padding(top = 16.dp),
-                    docs = docs,
-                    courierDocs = s.data,
-                    onNavigateTo = onNavigateTo
-                )
+            if (s.data.all { it.verification == UploadVerificationStatus.VERIFIED }) {
+               sessionViewModel.refreshSession {
+                   onNavigateTo(HomeScreenDestination.route)
+               }
+            } else {
+                Column(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    Heading(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        heading = stringResource(R.string.let_s_get_you_setup),
+                        subHeading = stringResource(R.string.lets_get_you_setup_subheading)
+                    )
+                    RequiredDocuments(
+                        modifier = Modifier
+                            .padding(top = 16.dp),
+                        docs = docs,
+                        courierDocs = s.data,
+                        onNavigateTo = onNavigateTo
+                    )
+                }
             }
         }
         is GetCourierDocumentsState.Loading -> {

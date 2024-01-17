@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.lang.Exception
 
 class SessionViewModel(
@@ -135,6 +136,14 @@ class SessionViewModel(
             } catch(e: Exception) {
                 SignInUiState.Error(e.localizedMessage)
             }
+        }
+    }
+
+    fun refreshSession(cb: () -> Unit = {}) = viewModelScope.launch {
+        try {
+            sessionRepository.refreshSession(sessionUiState.value).also { cb() }
+        } catch(e: IOException) {
+            e.printStackTrace()
         }
     }
 

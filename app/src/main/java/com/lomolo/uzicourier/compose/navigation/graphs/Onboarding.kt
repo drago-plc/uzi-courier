@@ -39,6 +39,7 @@ import com.lomolo.uzicourier.compose.onboarding.OnboardingScreen
 import com.lomolo.uzicourier.compose.onboarding.OnboardingViewModel
 import com.lomolo.uzicourier.compose.onboarding.PoliceClearanceDocument
 import com.lomolo.uzicourier.compose.onboarding.PoliceClearanceDocumentDestination
+import com.lomolo.uzicourier.compose.signin.SessionViewModel
 import com.lomolo.uzicourier.type.UploadFile
 
 object OnboardingGraph: Navigation {
@@ -49,6 +50,7 @@ object OnboardingGraph: Navigation {
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.onboarding(
     navController: NavHostController,
+    sessionViewModel: SessionViewModel,
     onboardingViewModel: OnboardingViewModel,
 ) {
     navigation(
@@ -58,6 +60,7 @@ fun NavGraphBuilder.onboarding(
         composable(route = OnboardingDestination.route) {
             OnboardingScreen(
                 onboardingViewModel = onboardingViewModel,
+                sessionViewModel = sessionViewModel,
                 onNavigateTo = {
                     navController.navigate(it)
                 }

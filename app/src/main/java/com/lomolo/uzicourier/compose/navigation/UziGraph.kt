@@ -74,6 +74,7 @@ fun UziCourierNavHost(
         )
         onboarding(
             navController = navController,
+            sessionViewModel = sessionViewModel,
             onboardingViewModel = onboardingViewModel,
         )
     }
