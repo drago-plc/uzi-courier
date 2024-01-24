@@ -1,0 +1,6 @@
+mutation TrackCourierGps($lat: Float! $lng: Float!) {
+    trackCourierGps(input: {
+        lat: $lat
+        lng: $lng
+    })
+}
