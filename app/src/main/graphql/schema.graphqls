@@ -36,7 +36,21 @@ input CourierUploadInput {
   uri: String!
 }
 
+type Geocode {
+  placeId: String!
+
+  formattedAddress: String!
+
+  location: Gps!
+}
+
 type Gps {
+  lat: Float!
+
+  lng: Float!
+}
+
+input GpsInput {
   lat: Float!
 
   lng: Float!
@@ -44,6 +58,16 @@ type Gps {
 
 type Mutation {
   createCourierDocument(input: CourierUploadInput!): Boolean!
+
+  trackCourierGps(input: GpsInput!): Boolean!
+}
+
+type Place {
+  id: String!
+
+  mainText: String!
+
+  secondaryText: String!
 }
 
 type Product {
@@ -64,6 +88,12 @@ type Query {
   hello: String!
 
   getCourierDocuments: [Uploads!]!
+
+  searchPlace(textQuery: String!): [Place!]!
+
+  reverseGeocode(place: GpsInput!): Geocode
+
+  getRoute(input: TripRouteInput!): TripRoute!
 }
 
 type Route {
@@ -122,6 +152,26 @@ type Trip {
   updated_at: Time
 }
 
+input TripInput {
+  placeId: String!
+
+  formattedAddress: String!
+
+  location: GpsInput!
+}
+
+type TripRoute {
+  productId: UUID!
+
+  duration: Time!
+}
+
+input TripRouteInput {
+  pickup: TripInput!
+
+  dropoff: TripInput!
+}
+
 enum TripStatus {
   ARRIVING
 
@@ -159,9 +209,9 @@ enum UploadVerificationStatus {
 type Uploads {
   ID: UUID!
 
-  type: String
+  type: String!
 
-  uri: String
+  uri: String!
 
   verification: UploadVerificationStatus!
 
