@@ -3,6 +3,7 @@ package com.lomolo.uzicourier.compose.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -159,6 +161,25 @@ private fun DefaultHomeScreen(
                     GetStarted(
                         onGetStartedClick = onGetStartedClick
                     )
+                }
+            }
+            Box(
+                Modifier
+                    .align(Alignment.BottomCenter)
+            ) {
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.Center),
+                    shape = MaterialTheme.shapes.extraSmall
+                ) {
+                   Text(
+                       text = "Go",
+                       style = MaterialTheme.typography.titleLarge,
+                       modifier = Modifier
+                           .padding(8.dp)
+                   )
                 }
             }
         }

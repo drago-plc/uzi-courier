@@ -6,10 +6,11 @@ import com.apollographql.apollo3.api.http.HttpRequest
 import com.apollographql.apollo3.api.http.HttpResponse
 import com.apollographql.apollo3.network.http.HttpInterceptor
 import com.apollographql.apollo3.network.http.HttpInterceptorChain
-import com.lomolo.uzicourier.model.SignIn
 import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.network.UziGqlApiRepository
 import com.lomolo.uzicourier.network.UziRestApiServiceInterface
+import com.lomolo.uzicourier.repository.CourierInterface
+import com.lomolo.uzicourier.repository.CourierRepository
 import com.lomolo.uzicourier.repository.SessionInterface
 import com.lomolo.uzicourier.repository.SessionRepository
 import com.lomolo.uzicourier.sql.UziStore
@@ -29,6 +30,7 @@ interface AppContainer {
     val sessionRepository: SessionInterface
     val apolloClient: ApolloClient
     val uziGqlApiRepository: UziGqlApiInterface
+    val courierRepository: CourierInterface
 }
 
 private const val baseApi = "https://795c-102-217-124-1.ngrok-free.app"
@@ -111,5 +113,9 @@ class DefaultContainer(private val context: Context): AppContainer {
 
     override val uziGqlApiRepository: UziGqlApiInterface by lazy {
         UziGqlApiRepository(apolloClient)
+    }
+
+    override val courierRepository: CourierInterface by lazy {
+        CourierRepository(uziGqlApiRepository)
     }
 }

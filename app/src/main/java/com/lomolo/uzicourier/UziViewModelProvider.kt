@@ -15,7 +15,10 @@ object UziViewModelProvider {
         lateinit var mainViewModel: MainViewModel
 
         initializer {
-            mainViewModel = MainViewModel(uziApplication().container.uziRestApiService)
+            mainViewModel = MainViewModel(
+                uziApplication().container.uziRestApiService,
+                uziApplication().container.courierRepository
+            )
             mainViewModel
         }
         initializer {

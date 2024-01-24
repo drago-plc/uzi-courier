@@ -8,13 +8,17 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.lomolo.uzicourier.common.countryPhoneCode
 import com.lomolo.uzicourier.network.UziRestApiServiceInterface
+import com.lomolo.uzicourier.repository.CourierInterface
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val uziRestApiService: UziRestApiServiceInterface
+    private val uziRestApiService: UziRestApiServiceInterface,
+    private val courierRepository: CourierInterface
 ): ViewModel() {
     private val _deviceDetails: MutableStateFlow<DeviceDetails> = MutableStateFlow(DeviceDetails())
     val deviceDetailsUiState = _deviceDetails.asStateFlow()
@@ -25,6 +29,12 @@ class MainViewModel(
     fun setDeviceLocation(gps: LatLng) {
         _deviceDetails.update {
             it.copy(gps = gps)
+        }
+        if (gps.latitude != 0.0 && gps.longitude != 0.0) {
+            viewModelScope.launch(Dispatchers.IO) {
+                delay(4000L)
+                courierRepository.trackCourierGps(gps)
+            }
         }
     }
 
