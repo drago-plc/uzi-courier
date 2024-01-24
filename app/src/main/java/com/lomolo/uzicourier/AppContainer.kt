@@ -31,6 +31,8 @@ interface AppContainer {
     val uziGqlApiRepository: UziGqlApiInterface
 }
 
+private const val baseApi = "https://795c-102-217-124-1.ngrok-free.app"
+
 class AuthInterceptor(
     private val sessionDao: SessionDao,
     private val sessionRepository: SessionInterface
@@ -81,7 +83,7 @@ class DefaultContainer(private val context: Context): AppContainer {
         .build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://8480-102-217-127-1.ngrok-free.app")
+        .baseUrl(baseApi)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .client(okhttpClient)
         .build()
@@ -98,7 +100,7 @@ class DefaultContainer(private val context: Context): AppContainer {
     }
 
     override val apolloClient = ApolloClient.Builder()
-        .serverUrl("https://8480-102-217-127-1.ngrok-free.app/api")
+        .serverUrl("${baseApi}/api")
         .addHttpInterceptor(
             AuthInterceptor(
                 UziStore.getStore(context).sessionDao(),
