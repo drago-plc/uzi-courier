@@ -17,6 +17,7 @@ object UziViewModelProvider {
         initializer {
             mainViewModel = MainViewModel(
                 uziApplication().container.uziRestApiService,
+                uziApplication().container.uziGqlApiRepository,
                 uziApplication().container.courierRepository
             )
             mainViewModel

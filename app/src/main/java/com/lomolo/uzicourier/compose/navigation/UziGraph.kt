@@ -46,6 +46,7 @@ fun UziCourierNavHost(
                 ) {
                     HomeScreen(
                         mainViewModel = mainViewModel,
+                        sessionViewModel = sessionViewModel,
                         onGetStartedClick = { navController.navigate(UserGraphDestination.route) },
                         session = session,
                         onNavigateTo = {

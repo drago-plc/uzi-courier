@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.lomolo.uzicourier.common.countryPhoneCode
+import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.network.UziRestApiServiceInterface
 import com.lomolo.uzicourier.repository.CourierInterface
 import kotlinx.coroutines.Dispatchers
@@ -15,15 +16,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class MainViewModel(
     private val uziRestApiService: UziRestApiServiceInterface,
+    private val uziGqlApiService: UziGqlApiInterface,
     private val courierRepository: CourierInterface
 ): ViewModel() {
     private val _deviceDetails: MutableStateFlow<DeviceDetails> = MutableStateFlow(DeviceDetails())
     val deviceDetailsUiState = _deviceDetails.asStateFlow()
 
     var deviceDetailsState: DeviceDetailsUiState by mutableStateOf(DeviceDetailsUiState.Loading)
+        private set
+
+    var setCourierStatusState: SetCourierStatusState by mutableStateOf(SetCourierStatusState.Success)
         private set
 
     fun setDeviceLocation(gps: LatLng) {
@@ -72,6 +78,20 @@ class MainViewModel(
         }
     }
 
+    fun setCourierStatus(status: String, cb: () -> Unit = {}) {
+        if (setCourierStatusState !is SetCourierStatusState.Loading) {
+            setCourierStatusState = SetCourierStatusState.Loading
+            viewModelScope.launch {
+                setCourierStatusState = try {
+                    uziGqlApiService.setCourierStatus(status)
+                    SetCourierStatusState.Success.also { cb() }
+                } catch (e: IOException) {
+                    SetCourierStatusState.Error(e.message)
+                }
+            }
+        }
+    }
+
     init {
         getIpinfo()
     }
@@ -90,4 +110,10 @@ interface DeviceDetailsUiState {
     data object Loading: DeviceDetailsUiState
     data object Success: DeviceDetailsUiState
     data class Error(val message: String?): DeviceDetailsUiState
+}
+
+interface SetCourierStatusState {
+    data object Success: SetCourierStatusState
+    data object Loading: SetCourierStatusState
+    data class Error(val message: String?): SetCourierStatusState
 }
