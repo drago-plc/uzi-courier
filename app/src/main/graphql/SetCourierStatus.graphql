@@ -1,0 +1,3 @@
+mutation SetCourierStatus($status: String!) {
+    setCourierStatus(status: $status)
+}

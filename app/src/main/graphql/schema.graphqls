@@ -61,7 +61,7 @@ type Mutation {
 
   trackCourierGps(input: GpsInput!): Boolean!
 
-  setCourierStatus(status: CourierStatus!): Boolean!
+  setCourierStatus(status: String!): Boolean!
 }
 
 type Place {
