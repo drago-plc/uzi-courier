@@ -3,10 +3,13 @@ package com.lomolo.uzicourier.compose.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -156,6 +159,11 @@ private fun DefaultHomeScreen(
     val uiSettings by remember {
         mutableStateOf(MapUiSettings(zoomControlsEnabled = false))
     }
+    val status = when(session.courierStatus) {
+        CourierStatus.OFFLINE -> {CourierStatus.ONLINE.toString()}
+        CourierStatus.ONLINE -> {CourierStatus.OFFLINE.toString()}
+        else -> {CourierStatus.OFFLINE.toString()}
+    }
 
     val mapProperties by remember {
         mutableStateOf(MapProperties(mapType = MapType.TERRAIN))
@@ -192,39 +200,55 @@ private fun DefaultHomeScreen(
                     )
                 }
             }
-            Box(
-                Modifier
-                    .align(Alignment.BottomCenter)
-            ) {
-                Button(
-                    onClick = {
-                        val status = when(session.courierStatus) {
-                            CourierStatus.OFFLINE -> {CourierStatus.ONLINE.toString()}
-                            CourierStatus.ONLINE -> {CourierStatus.OFFLINE.toString()}
-                            else -> {CourierStatus.OFFLINE.toString()}
-                        }
-
-                        mainViewModel.setCourierStatus(status) {
-                            sessionViewModel.refreshSession()
-                            scope.launch { snackbarHostState.showSnackbar("You are now ${status.lowercase()}!") }
-                        }
-                    },
-                    contentPadding = PaddingValues(16.dp),
-                    colors = ButtonColors(
-                        containerColor = if (session.courierStatus == CourierStatus.ONLINE) Color(0xff1b7f37) else ButtonDefaults.buttonColors().containerColor,
-                        contentColor = ButtonDefaults.buttonColors().contentColor,
-                        disabledContainerColor = ButtonDefaults.buttonColors().disabledContainerColor,
-                        disabledContentColor = ButtonDefaults.buttonColors().disabledContentColor
-                    ),
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.Center),
-                    shape = MaterialTheme.shapes.extraSmall
+            // TODO only show if courier is not on a trip
+            if (isAuthed) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .background(MaterialTheme.colorScheme.background)
                 ) {
-                   Text(
-                       text = "Go",
-                       style = MaterialTheme.typography.titleLarge,
-                   )
+                    Row(
+                        modifier = Modifier
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        if (status == CourierStatus.OFFLINE.toString()) {
+                            Text(
+                                "Ready to work?",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        } else {
+                            Text(
+                                "Not feeling it today?",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        Button(
+                            onClick = {
+                                mainViewModel.setCourierStatus(status) {
+                                    sessionViewModel.refreshSession()
+                                    scope.launch { snackbarHostState.showSnackbar("You are now ${status.lowercase()}!") }
+                                }
+                            },
+                            contentPadding = PaddingValues(16.dp),
+                            colors = ButtonColors(
+                                containerColor = if (session.courierStatus == CourierStatus.ONLINE) Color(0xff1b7f37) else ButtonDefaults.buttonColors().containerColor,
+                                contentColor = ButtonDefaults.buttonColors().contentColor,
+                                disabledContainerColor = ButtonDefaults.buttonColors().disabledContainerColor,
+                                disabledContentColor = ButtonDefaults.buttonColors().disabledContentColor
+                            ),
+                            modifier = Modifier
+                                .padding(16.dp),
+                            shape = MaterialTheme.shapes.extraSmall
+                        ) {
+                            Text(
+                                text = "Go",
+                                style = MaterialTheme.typography.titleLarge,
+                            )
+                        }
+                    }
                 }
             }
         }

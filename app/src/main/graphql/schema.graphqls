@@ -3,13 +3,25 @@ type Courier {
 
   user_id: UUID!
 
+  user: User!
+
+  avatar: Uploads
+
   verified: Boolean!
 
   status: CourierStatus!
 
   rating: Float!
 
+  location: Gps!
+
   trip_id: UUID
+
+  trip: Trip
+
+  product_id: UUID!
+
+  product: Product!
 
   completedTrips: Int!
 
@@ -34,6 +46,16 @@ input CourierUploadInput {
   type: UploadFile!
 
   uri: String!
+}
+
+input CreateTripInput {
+  tripInput: TripRouteInput!
+
+  tripProductId: String!
+
+  recipient: TripRecipientInput!
+
+  confirmedPickup: TripInput!
 }
 
 type Geocode {
@@ -62,6 +84,8 @@ type Mutation {
   trackCourierGps(input: GpsInput!): Boolean!
 
   setCourierStatus(status: String!): Boolean!
+
+  createTrip(input: CreateTripInput!): Trip!
 }
 
 type Place {
@@ -79,6 +103,8 @@ type Product {
 
   description: String!
 
+  icon_url: String!
+
   price: Int!
 
   created_at: Time
@@ -95,7 +121,31 @@ type Query {
 
   reverseGeocode(place: GpsInput!): Geocode
 
-  getRoute(input: TripRouteInput!): TripRoute!
+  computeTripRoute(input: TripRouteInput!): TripRoute!
+
+  getCourierNearPickupPoint(point: GpsInput!): [Courier!]!
+
+  getTripDetails(tripId: UUID!): Trip!
+}
+
+type Recipient {
+  id: UUID!
+
+  name: String!
+
+  building_name: String
+
+  unit_name: String
+
+  phone: String!
+
+  trip_id: UUID!
+
+  trip: Trip!
+
+  created_at: Time
+
+  updated_at: Time
 }
 
 type Route {
@@ -113,6 +163,10 @@ type Route {
 type Session {
   id: UUID!
 
+  first_name: String
+
+  last_name: String
+
   ip: String!
 
   userAgent: String!
@@ -128,18 +182,24 @@ type Session {
   courierStatus: CourierStatus
 }
 
+type Subscription {
+  tripUpdates(tripId: UUID!): TripUpdate!
+}
+
 scalar Time
 
 type Trip {
   id: UUID!
 
-  courier_id: UUID!
+  courier_id: UUID
+
+  courier: Courier
 
   user_id: UUID!
 
-  start_location: Gps!
+  start_location: Gps
 
-  end_location: Gps!
+  end_location: Gps
 
   status: TripStatus!
 
@@ -148,6 +208,8 @@ type Trip {
   route_id: UUID
 
   route: Route
+
+  recipient: Recipient!
 
   created_at: Time
 
@@ -162,10 +224,22 @@ input TripInput {
   location: GpsInput!
 }
 
-type TripRoute {
-  productId: UUID!
+input TripRecipientInput {
+  name: String!
 
-  duration: Time!
+  building_name: String
+
+  unit_name: String
+
+  phone: String!
+}
+
+type TripRoute {
+  polyline: String!
+
+  distance: Int!
+
+  availableProducts: [Product!]!
 }
 
 input TripRouteInput {
@@ -180,6 +254,20 @@ enum TripStatus {
   EN_ROUTE
 
   COMPLETE
+
+  COURIER_ARRIVING
+
+  COURIER_FOUND
+
+  COURIER_NOT_FOUND
+}
+
+type TripUpdate {
+  id: UUID!
+
+  status: TripStatus!
+
+  location: Gps
 }
 
 scalar UUID
@@ -436,4 +524,5 @@ directive @specifiedBy (url: String!) on SCALAR
 schema {
   query: Query
   mutation: Mutation
+  subscription: Subscription
 }
