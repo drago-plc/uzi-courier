@@ -160,7 +160,7 @@ private fun DefaultHomeScreen(
         mutableStateOf(MapUiSettings(zoomControlsEnabled = false))
     }
     val status = when(session.courierStatus) {
-        CourierStatus.OFFLINE -> {CourierStatus.ONLINE.toString()}
+        CourierStatus.OFFLINE -> {CourierStatus.OFFLINE.toString()}
         CourierStatus.ONLINE -> {CourierStatus.OFFLINE.toString()}
         else -> {CourierStatus.OFFLINE.toString()}
     }
@@ -213,23 +213,28 @@ private fun DefaultHomeScreen(
                             .padding(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (status == CourierStatus.OFFLINE.toString()) {
+                        if (session.courierStatus == CourierStatus.OFFLINE) {
                             Text(
                                 "Ready to work?",
                                 style = MaterialTheme.typography.titleMedium
                             )
                         } else {
                             Text(
-                                "Not feeling it today?",
+                                "Go offline?",
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         Button(
                             onClick = {
-                                mainViewModel.setCourierStatus(status) {
+                                val s = if (session.courierStatus == CourierStatus.OFFLINE)
+                                    CourierStatus.ONLINE.toString()
+                                else
+                                    CourierStatus.OFFLINE.toString()
+
+                                mainViewModel.setCourierStatus(s) {
                                     sessionViewModel.refreshSession()
-                                    scope.launch { snackbarHostState.showSnackbar("You are now ${status.lowercase()}!") }
+                                    scope.launch { snackbarHostState.showSnackbar("You are now ${s.lowercase()}!") }
                                 }
                             },
                             contentPadding = PaddingValues(16.dp),
