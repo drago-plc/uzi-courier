@@ -82,7 +82,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(innerPadding)) {
             when(mainViewModel.deviceDetailsState) {
-                is DeviceDetailsUiState.Loading -> Loader(
+                DeviceDetailsUiState.Loading -> Loader(
                     modifier = Modifier.matchParentSize()
                 )
                 is DeviceDetailsUiState.Error -> {
@@ -91,7 +91,7 @@ fun HomeScreen(
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
-                is DeviceDetailsUiState.Success -> {
+                DeviceDetailsUiState.Success -> {
                     HomeSuccessScreen(
                         modifier = Modifier.matchParentSize(),
                         snackbarHostState = snackbarHostState,

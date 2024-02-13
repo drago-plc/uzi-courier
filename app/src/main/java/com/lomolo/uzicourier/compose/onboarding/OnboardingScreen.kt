@@ -64,7 +64,7 @@ fun OnboardingScreen(
 
     when(val s = onboardingViewModel.getCourierDocumentsUiState) {
         is GetCourierDocumentsState.Success -> {
-            if (s.data.all { it.verification == UploadVerificationStatus.VERIFIED }) {
+            if (s.data.isNotEmpty() && s.data.all { it.verification == UploadVerificationStatus.VERIFIED }) {
                sessionViewModel.refreshSession {
                    onNavigateTo(HomeScreenDestination.route)
                }
