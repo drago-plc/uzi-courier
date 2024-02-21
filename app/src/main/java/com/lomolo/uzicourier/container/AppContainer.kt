@@ -2,6 +2,7 @@ package com.lomolo.uzicourier.container
 
 import android.content.Context
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.network.okHttpClient
 import com.lomolo.uzicourier.apollo.interceptors.AuthInterceptor
 import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.network.UziGqlApiRepository
@@ -13,6 +14,7 @@ import com.lomolo.uzicourier.repository.SessionRepository
 import com.lomolo.uzicourier.sql.UziStore
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -56,7 +58,13 @@ class DefaultContainer(private val context: Context): AppContainer {
     }
 
     override val apolloClient = ApolloClient.Builder()
-        .serverUrl("${baseApi}/api")
+        .okHttpClient(okhttpClient)
+        .httpServerUrl("${baseApi}/api")
+        .webSocketServerUrl("${wss}/subscription")
+        .webSocketReopenWhen {_, attempt ->
+            delay(attempt * 1000)
+            true
+        }
         .addHttpInterceptor(
             AuthInterceptor(
                 UziStore.getStore(context).sessionDao(),

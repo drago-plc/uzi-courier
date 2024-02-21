@@ -90,6 +90,8 @@ type Mutation {
   courierArriving(tripId: UUID!): Boolean!
 
   courierEnroute(tripId: UUID!): Boolean!
+
+  cancelTrip(tripId: UUID!): Boolean!
 }
 
 type Place {
@@ -143,6 +145,8 @@ type Recipient {
 
   phone: String!
 
+  trip_note: String!
+
   trip_id: UUID!
 
   trip: Trip!
@@ -189,7 +193,7 @@ type Session {
 type Subscription {
   tripUpdates(tripId: UUID!): TripUpdate!
 
-  assignTrip(userId: UUID!): TripUpdate!
+  assignTrip: TripUpdate!
 }
 
 scalar Time
@@ -209,11 +213,9 @@ type Trip {
 
   status: TripStatus!
 
-  cost: String
+  cost: Int!
 
-  route_id: UUID
-
-  route: Route
+  route: TripRoute
 
   recipient: Recipient!
 
@@ -238,6 +240,8 @@ input TripRecipientInput {
   unit_name: String
 
   phone: String!
+
+  trip_note: String!
 }
 
 type TripRoute {
@@ -255,13 +259,13 @@ input TripRouteInput {
 }
 
 enum TripStatus {
-  ARRIVING
+  COURIER_EN_ROUTE
 
-  EN_ROUTE
+  CANCELLED
 
   COMPLETE
 
-  ASSIGNED
+  COURIER_ASSIGNED
 
   COURIER_ARRIVING
 
