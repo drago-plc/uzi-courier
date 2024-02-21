@@ -16,6 +16,7 @@ import com.lomolo.uzicourier.MainViewModel
 import com.lomolo.uzicourier.UziViewModelProvider
 import com.lomolo.uzicourier.compose.home.HomeScreen
 import com.lomolo.uzicourier.compose.home.HomeScreenDestination
+import com.lomolo.uzicourier.compose.home.TripViewModel
 import com.lomolo.uzicourier.compose.navigation.graphs.UserGraphDestination
 import com.lomolo.uzicourier.compose.navigation.graphs.onboarding
 import com.lomolo.uzicourier.compose.navigation.graphs.user
@@ -28,7 +29,8 @@ fun UziCourierNavHost(
     navController: NavHostController,
     mainViewModel: MainViewModel = viewModel(factory = UziViewModelProvider.Factory),
     sessionViewModel: SessionViewModel = viewModel(factory = UziViewModelProvider.Factory),
-    onboardingViewModel: OnboardingViewModel = viewModel(factory = UziViewModelProvider.Factory)
+    onboardingViewModel: OnboardingViewModel = viewModel(factory = UziViewModelProvider.Factory),
+    tripViewModel: TripViewModel = viewModel(factory = UziViewModelProvider.Factory)
 ) {
 
     val session by sessionViewModel.sessionUiState.collectAsState()
@@ -49,6 +51,7 @@ fun UziCourierNavHost(
                         sessionViewModel = sessionViewModel,
                         onGetStartedClick = { navController.navigate(UserGraphDestination.route) },
                         session = session,
+                        tripViewModel = tripViewModel,
                         onNavigateTo = {
                             navController.navigate(it) {
                                 // Pop up to the start destination of the graph to

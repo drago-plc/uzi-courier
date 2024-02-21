@@ -1,0 +1,6 @@
+query GetCourierTrip {
+    getCourierTrip {
+        id
+        status
+    }
+}

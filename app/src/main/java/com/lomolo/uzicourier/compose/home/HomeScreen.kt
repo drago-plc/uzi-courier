@@ -62,6 +62,7 @@ object HomeScreenDestination: Navigation {
 fun HomeScreen(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel,
+    tripViewModel: TripViewModel,
     sessionViewModel: SessionViewModel,
     onGetStartedClick: () -> Unit = {},
     onNavigateTo: (String) -> Unit = {},
@@ -285,3 +286,8 @@ private fun HomeErrorScreen(
         }
     }
 }
+
+@Composable
+private fun TripScreen(
+    modifier: Modifier = Modifier
+) {}
