@@ -87,11 +87,7 @@ type Mutation {
 
   createTrip(input: CreateTripInput!): Trip!
 
-  courierArriving(tripId: UUID!): Boolean!
-
-  courierEnroute(tripId: UUID!): Boolean!
-
-  cancelTrip(tripId: UUID!): Boolean!
+  reportTripStatus(tripId: UUID!, status: String!): Boolean!
 }
 
 type Place {
@@ -132,6 +128,8 @@ type Query {
   getCourierNearPickupPoint(point: GpsInput!): [Courier!]!
 
   getTripDetails(tripId: UUID!): Trip!
+
+  getCourierTrip: Trip!
 }
 
 type Recipient {
