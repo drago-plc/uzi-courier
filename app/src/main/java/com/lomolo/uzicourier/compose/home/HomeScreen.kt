@@ -51,6 +51,7 @@ import com.lomolo.uzicourier.compose.signin.SessionViewModel
 import com.lomolo.uzicourier.compose.signin.UserNameDestination
 import com.lomolo.uzicourier.model.CourierStatus
 import com.lomolo.uzicourier.model.Session
+import com.lomolo.uzicourier.model.Trip
 import kotlinx.coroutines.launch
 
 object HomeScreenDestination: Navigation {
@@ -66,7 +67,8 @@ fun HomeScreen(
     sessionViewModel: SessionViewModel,
     onGetStartedClick: () -> Unit = {},
     onNavigateTo: (String) -> Unit = {},
-    session: Session
+    session: Session,
+    tripUpdate: Trip
 ) {
     val deviceDetails by mainViewModel.deviceDetailsUiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -101,7 +103,9 @@ fun HomeScreen(
                         deviceDetails = deviceDetails,
                         onGetStartedClick = onGetStartedClick,
                         onNavigateTo = onNavigateTo,
-                        session = session
+                        session = session,
+                        tripUpdate = tripUpdate,
+                        tripViewModel = tripViewModel
                     )
                 }
             }
@@ -112,6 +116,7 @@ fun HomeScreen(
 @Composable
 private fun HomeSuccessScreen(
     modifier: Modifier = Modifier,
+    tripViewModel: TripViewModel,
     mainViewModel: MainViewModel,
     sessionViewModel: SessionViewModel,
     snackbarHostState: SnackbarHostState,
@@ -119,6 +124,7 @@ private fun HomeSuccessScreen(
     onGetStartedClick: () -> Unit,
     session: Session,
     onNavigateTo: (String) -> Unit = {},
+    tripUpdate: Trip
 ) {
     val isAuthed = session.token.isNotBlank()
     val isOnboarding = session.onboarding
@@ -132,6 +138,9 @@ private fun HomeSuccessScreen(
             onNavigateTo(OnboardingDestination.route)
         }
         else -> {
+            if (tripUpdate.id.isNotBlank()) {
+                TripScreen(tripViewModel = tripViewModel)
+            }
             DefaultHomeScreen(
                 modifier = modifier,
                 mainViewModel = mainViewModel,
@@ -160,16 +169,9 @@ private fun DefaultHomeScreen(
     val uiSettings by remember {
         mutableStateOf(MapUiSettings(zoomControlsEnabled = false))
     }
-    val status = when(session.courierStatus) {
-        CourierStatus.OFFLINE -> {CourierStatus.OFFLINE.toString()}
-        CourierStatus.ONLINE -> {CourierStatus.OFFLINE.toString()}
-        else -> {CourierStatus.OFFLINE.toString()}
-    }
-
     val mapProperties by remember {
         mutableStateOf(MapProperties(mapType = MapType.TERRAIN))
     }
-
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(deviceDetails.gps, 17f)
     }
@@ -289,5 +291,20 @@ private fun HomeErrorScreen(
 
 @Composable
 private fun TripScreen(
-    modifier: Modifier = Modifier
-) {}
+    modifier: Modifier = Modifier,
+    tripViewModel: TripViewModel
+) {
+    val mapUiSettings by remember {
+        mutableStateOf(MapUiSettings(zoomControlsEnabled = false, compassEnabled = false))
+    }
+    val mapProperties by remember {
+        mutableStateOf(MapProperties(mapType = MapType.TERRAIN))
+    }
+
+    GoogleMap(
+        uiSettings = mapUiSettings,
+        properties = mapProperties,
+        modifier = modifier,
+        onMapLoaded = {}
+    )
+}

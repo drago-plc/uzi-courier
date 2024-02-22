@@ -34,6 +34,7 @@ fun UziCourierNavHost(
 ) {
 
     val session by sessionViewModel.sessionUiState.collectAsState()
+    val tripUiState by tripViewModel.tripUiState.collectAsState()
 
     NavHost(
         modifier = modifier,
@@ -52,6 +53,7 @@ fun UziCourierNavHost(
                         onGetStartedClick = { navController.navigate(UserGraphDestination.route) },
                         session = session,
                         tripViewModel = tripViewModel,
+                        tripUpdate = tripUiState,
                         onNavigateTo = {
                             navController.navigate(it) {
                                 // Pop up to the start destination of the graph to
