@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import com.lomolo.uzicourier.MainViewModel
 import com.lomolo.uzicourier.R
 
@@ -23,6 +24,7 @@ internal fun HomeErrorScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
+            textAlign = TextAlign.Center,
             text = stringResource(R.string.not_your_fault_err),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.error,
@@ -32,7 +34,7 @@ internal fun HomeErrorScreen(
         ) {
             Text(
                 text = stringResource(R.string.retry),
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelSmall
             )
         }
     }
