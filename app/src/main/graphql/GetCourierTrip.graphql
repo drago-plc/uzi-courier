@@ -10,5 +10,12 @@ query GetTrip($tripId: UUID!) {
             lat
             lng
         }
+        recipient {
+            name
+            trip_note
+            phone
+            building_name
+            unit_name
+        }
     }
 }
