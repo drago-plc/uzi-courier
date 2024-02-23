@@ -1,0 +1,6 @@
+subscription TripAssignment($userId: UUID!) {
+    assignTrip(userId: $userId) {
+        id
+        status
+    }
+}
