@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.compose.CameraPositionState
 import com.lomolo.uzicourier.compose.loader.Loader
+import java.text.NumberFormat
 
 @Composable
 internal fun TripScreen(
@@ -82,16 +84,27 @@ internal fun TripScreen(
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
-                                            Icon(
-                                                Icons.TwoTone.LocationOn,
-                                                contentDescription = null,
-                                                modifier = Modifier
-                                                    .size(32.dp)
-                                            )
-                                            Text(
-                                                g.geocode.formattedAddress,
-                                                style = MaterialTheme.typography.labelSmall
-                                            )
+                                            Column {
+                                                Row {
+                                                    Icon(
+                                                        Icons.TwoTone.LocationOn,
+                                                        contentDescription = null,
+                                                        modifier = Modifier
+                                                            .size(32.dp)
+                                                    )
+                                                    Text(
+                                                        g.geocode.formattedAddress,
+                                                        style = MaterialTheme.typography.labelSmall
+                                                    )
+                                                }
+                                                Spacer(modifier = Modifier.size(16.dp))
+                                                Row {
+                                                    Text(
+                                                        "Trip Cost KES ${NumberFormat.getNumberInstance().format(s.trip.cost)}",
+                                                        style = MaterialTheme.typography.labelSmall
+                                                    )
+                                                }
+                                            }
                                         }
                                     }
                                 }
