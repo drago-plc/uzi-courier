@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.LocationOn
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +35,7 @@ internal fun TripScreen(
     mapLoaded: Boolean
 ) {
     LaunchedEffect(Unit) { tripViewModel.getCourierAssignedTrip() }
+    var polyline: List<LatLng> = listOf()
 
     Box(modifier = modifier) {
         when(val s = tripViewModel.getCourierTripState) {
@@ -54,6 +59,8 @@ internal fun TripScreen(
                                 1000
                             )
                         }
+                        if (s.trip.route != null) polyline = PolyUtil.decode(s.trip.route.polyline)
+                        if (polyline.isNotEmpty()) tripViewModel.reverseGeocode(polyline.last())
                     }
 
                     Column(
@@ -64,8 +71,35 @@ internal fun TripScreen(
                     ) {
                         Text(
                             "Your trip is ready. Proceed to pickup",
-                            style = MaterialTheme.typography.labelSmall
+                            style = MaterialTheme.typography.titleMedium
                         )
+                        Box(Modifier
+                            .padding(8.dp)
+                        ) {
+                            when(val g = tripViewModel.reverseGeocodeState) {
+                                is ReverseGeocodeState.Success -> {
+                                    if (g.geocode != null) {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                Icons.TwoTone.LocationOn,
+                                                contentDescription = null,
+                                                modifier = Modifier
+                                                    .size(32.dp)
+                                            )
+                                            Text(
+                                                g.geocode.formattedAddress,
+                                                style = MaterialTheme.typography.labelSmall
+                                            )
+                                        }
+                                    }
+                                }
+                                ReverseGeocodeState.Loading -> {
+                                    Loader()
+                                }
+                            }
+                        }
 
                         Button(
                             modifier = Modifier
