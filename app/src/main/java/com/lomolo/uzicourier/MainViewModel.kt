@@ -36,8 +36,8 @@ class MainViewModel(
         _deviceDetails.update {
             it.copy(gps = gps)
         }
-        if (gps.latitude != 0.0 && gps.longitude != 0.0) {
-            viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (gps.latitude != 0.0 && gps.longitude != 0.0) {
                 delay(4000L)
                 courierRepository.trackCourierGps(gps)
             }

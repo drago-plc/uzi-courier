@@ -53,7 +53,7 @@ fun UziCourierNavHost(
                         onGetStartedClick = { navController.navigate(UserGraphDestination.route) },
                         session = session,
                         tripViewModel = tripViewModel,
-                        tripUpdate = tripUiState,
+                        assignment = tripUiState,
                         onNavigateTo = {
                             navController.navigate(it) {
                                 // Pop up to the start destination of the graph to

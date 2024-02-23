@@ -2,7 +2,6 @@ package com.lomolo.uzicourier.repository
 
 import com.lomolo.uzicourier.model.Session
 import com.lomolo.uzicourier.model.SignIn
-import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.network.UziRestApiServiceInterface
 import com.lomolo.uzicourier.sql.dao.SessionDao
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +21,7 @@ class SessionRepository(
     override suspend fun signIn(input: SignIn) {
         val res = uziRestApiService.signIn(input)
         val newSession = Session(
+            id = res.id,
             token = res.token,
             courierStatus = res.courierStatus,
             phone = res.phone,

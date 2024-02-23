@@ -1,6 +1,14 @@
-query GetCourierTrip {
-    getCourierTrip {
+query GetTrip($tripId: UUID!) {
+    getTripDetails(tripId: $tripId) {
         id
         status
+        route {
+            polyline
+        }
+        cost
+        start_location {
+            lat
+            lng
+        }
     }
 }

@@ -5,7 +5,7 @@ import com.apollographql.apollo3.api.ApolloResponse
 import com.google.android.gms.maps.model.LatLng
 import com.lomolo.uzicourier.CreateCourierDocumentMutation
 import com.lomolo.uzicourier.GetCourierDocumentsQuery
-import com.lomolo.uzicourier.GetCourierTripQuery
+import com.lomolo.uzicourier.GetTripQuery
 import com.lomolo.uzicourier.SetCourierStatusMutation
 import com.lomolo.uzicourier.TrackCourierGpsMutation
 import com.lomolo.uzicourier.TripAssignmentSubscription
@@ -17,7 +17,7 @@ interface UziGqlApiInterface {
     suspend fun createCourierDocument(type: UploadFile, uri: String): ApolloResponse<CreateCourierDocumentMutation.Data>
     suspend fun trackCourierGps(gps: LatLng): ApolloResponse<TrackCourierGpsMutation.Data>
     suspend fun setCourierStatus(status: String): ApolloResponse<SetCourierStatusMutation.Data>
-    suspend fun getCourierTrip(): ApolloResponse<GetCourierTripQuery.Data>
+    suspend fun getTrip(tripId: String): ApolloResponse<GetTripQuery.Data>
     fun tripAssignment(userId: String): Flow<ApolloResponse<TripAssignmentSubscription.Data>>
 }
 
@@ -38,8 +38,8 @@ class UziGqlApiRepository(
             SetCourierStatusMutation(status)
         ).execute()
 
-    override suspend fun getCourierTrip() = apolloClient.query(
-            GetCourierTripQuery()
+    override suspend fun getTrip(tripId: String) = apolloClient.query(
+            GetTripQuery(tripId)
         ).execute()
 
     override fun tripAssignment(userId: String) = apolloClient.subscription(TripAssignmentSubscription(userId)).toFlow()

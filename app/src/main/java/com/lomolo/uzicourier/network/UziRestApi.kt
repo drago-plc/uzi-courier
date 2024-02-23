@@ -3,7 +3,6 @@ package com.lomolo.uzicourier.network
 import com.lomolo.uzicourier.model.Ipinfo
 import com.lomolo.uzicourier.model.Session
 import com.lomolo.uzicourier.model.SignIn
-import com.lomolo.uzicourier.model.Upload
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
