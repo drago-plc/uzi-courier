@@ -12,10 +12,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.Call
+import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material.icons.twotone.LocationOn
+import androidx.compose.material.icons.twotone.MailOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -84,7 +89,26 @@ internal fun TripScreen(
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
-                                            Column {
+                                            Column(
+                                                modifier = Modifier
+                                                    .padding(16.dp)
+                                            ) {
+                                                Row(
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    Text(
+                                                        s.trip.recipient.name,
+                                                        style = MaterialTheme.typography.labelSmall,
+                                                        modifier = Modifier.padding(top=8.dp, bottom=8.dp)
+                                                    )
+                                                    IconButton(onClick = { /*TODO*/ }) {
+                                                       Icon(
+                                                           Icons.TwoTone.Call,
+                                                           contentDescription = null,
+                                                           modifier = Modifier.size(20.dp)
+                                                       )
+                                                    }
+                                                }
                                                 Row {
                                                     Icon(
                                                         Icons.TwoTone.LocationOn,
@@ -94,14 +118,40 @@ internal fun TripScreen(
                                                     )
                                                     Text(
                                                         g.geocode.formattedAddress,
-                                                        style = MaterialTheme.typography.labelSmall
+                                                        style = MaterialTheme.typography.bodyLarge
+                                                    )
+                                                }
+                                                if (!s.trip.recipient.building_name.isNullOrBlank() || !s.trip.recipient.unit_name.isNullOrBlank()) {
+                                                    Row {
+                                                        Icon(
+                                                            Icons.TwoTone.Home,
+                                                            contentDescription = null,
+                                                            modifier = Modifier
+                                                                .size(32.dp)
+                                                        )
+                                                        Text(
+                                                            "${s.trip.recipient.building_name} ${s.trip.recipient.unit_name}",
+                                                            style = MaterialTheme.typography.bodyLarge
+                                                        )
+                                                    }
+                                                }
+                                                if (s.trip.recipient.trip_note.isNotBlank()) {
+                                                    Spacer(modifier = Modifier.size(16.dp))
+                                                    SuggestionChip(
+                                                        onClick = { /*TODO*/ },
+                                                        label = {
+                                                            Text(
+                                                                text = "Trip note",
+                                                                style = MaterialTheme.typography.labelSmall
+                                                            )
+                                                        }
                                                     )
                                                 }
                                                 Spacer(modifier = Modifier.size(16.dp))
-                                                Row {
+                                                Box {
                                                     Text(
                                                         "Trip Cost KES ${NumberFormat.getNumberInstance().format(s.trip.cost)}",
-                                                        style = MaterialTheme.typography.labelSmall
+                                                        style = MaterialTheme.typography.bodyLarge
                                                     )
                                                 }
                                             }
