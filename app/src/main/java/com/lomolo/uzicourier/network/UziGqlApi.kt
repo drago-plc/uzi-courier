@@ -6,10 +6,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.lomolo.uzicourier.CreateCourierDocumentMutation
 import com.lomolo.uzicourier.GetCourierDocumentsQuery
 import com.lomolo.uzicourier.GetTripQuery
+import com.lomolo.uzicourier.ReportTripStatusMutation
 import com.lomolo.uzicourier.ReverseGeocodeQuery
 import com.lomolo.uzicourier.SetCourierStatusMutation
 import com.lomolo.uzicourier.TrackCourierGpsMutation
 import com.lomolo.uzicourier.TripAssignmentSubscription
+import com.lomolo.uzicourier.type.TripStatus
 import com.lomolo.uzicourier.type.UploadFile
 import kotlinx.coroutines.flow.Flow
 
@@ -21,6 +23,7 @@ interface UziGqlApiInterface {
     suspend fun getTrip(tripId: String): ApolloResponse<GetTripQuery.Data>
     fun tripAssignment(userId: String): Flow<ApolloResponse<TripAssignmentSubscription.Data>>
     suspend fun reverseGeocode(gps: LatLng): ApolloResponse<ReverseGeocodeQuery.Data>
+    suspend fun reportTripStatus(tripId: String, status: TripStatus): ApolloResponse<ReportTripStatusMutation.Data>
 }
 
 class UziGqlApiRepository(
@@ -48,5 +51,9 @@ class UziGqlApiRepository(
 
     override suspend fun reverseGeocode(gps: LatLng) = apolloClient.query(
         ReverseGeocodeQuery(lat = gps.latitude, lng = gps.longitude)
+    ).execute()
+
+    override suspend fun reportTripStatus(tripId: String, status: TripStatus) = apolloClient.mutation(
+        ReportTripStatusMutation(tripId, status)
     ).execute()
 }

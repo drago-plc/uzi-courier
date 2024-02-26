@@ -2,10 +2,12 @@ package com.lomolo.uzicourier.repository
 
 import com.apollographql.apollo3.api.ApolloResponse
 import com.lomolo.uzicourier.GetTripQuery
+import com.lomolo.uzicourier.ReportTripStatusMutation
 import com.lomolo.uzicourier.TripAssignmentSubscription
 import com.lomolo.uzicourier.model.Trip
 import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.sql.dao.TripDao
+import com.lomolo.uzicourier.type.TripStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 
@@ -14,6 +16,7 @@ interface TripInterface{
     fun getTrip(): Flow<List<Trip>>
     fun getTripAssignment(userId: String): Flow<ApolloResponse<TripAssignmentSubscription.Data>>
     suspend fun clearTrips()
+    suspend fun reportTripStatus(tripId: String, status: TripStatus): ApolloResponse<ReportTripStatusMutation.Data>
 }
 
 class TripRepository(
@@ -35,4 +38,13 @@ class TripRepository(
         }
 
     override suspend fun clearTrips() = tripDao.clearTrips()
+
+    override suspend fun reportTripStatus(
+        tripId: String,
+        status: TripStatus
+    ): ApolloResponse<ReportTripStatusMutation.Data> {
+        val res = uziGqlApiRepository.reportTripStatus(tripId, status)
+        tripDao.updateTrip(Trip(id = tripId, status = status.toString()))
+        return res
+    }
 }

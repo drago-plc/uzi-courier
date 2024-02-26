@@ -13,5 +13,6 @@ enum class TripStatus {
     CANCELLED,
     CREATE,
     COURIER_ASSIGNED,
+    COURIER_ARRIVING,
     COMPLETE,
 }

@@ -8,10 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo3.exception.ApolloException
 import com.google.android.gms.maps.model.LatLng
 import com.lomolo.uzicourier.GetTripQuery
+import com.lomolo.uzicourier.ReportTripStatusMutation
 import com.lomolo.uzicourier.ReverseGeocodeQuery
 import com.lomolo.uzicourier.model.Trip
 import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.repository.TripInterface
+import com.lomolo.uzicourier.type.TripStatus
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -45,6 +47,7 @@ class TripViewModel(
         private set
     var reverseGeocodeState: ReverseGeocodeState by mutableStateOf(ReverseGeocodeState.Success(null))
         private set
+    var reportTripStatusState: ReportTripStatusState by mutableStateOf(ReportTripStatusState.Success(false))
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
@@ -79,6 +82,21 @@ class TripViewModel(
             }
         }
     }
+
+    fun reportTripStatus(status: TripStatus) {
+        if (reportTripStatusState !is ReportTripStatusState.Loading) {
+            reportTripStatusState = ReportTripStatusState.Loading
+            viewModelScope.launch {
+                reportTripStatusState = try {
+                    val res = tripRepository.reportTripStatus(tripUiState.value.id, status).dataOrThrow()
+                    ReportTripStatusState.Success(res.reportTripStatus)
+                } catch(e: ApolloException) {
+                    e.printStackTrace()
+                    ReportTripStatusState.Error(e.message)
+                }
+            }
+        }
+    }
 }
 
 interface GetCourierTripState {
@@ -91,4 +109,10 @@ interface ReverseGeocodeState {
     data class Success(val geocode: ReverseGeocodeQuery.ReverseGeocode?): ReverseGeocodeState
     data object Loading: ReverseGeocodeState
     data class Error(val message: String?): ReverseGeocodeState
+}
+
+interface ReportTripStatusState {
+    data class Success(val tripStatus: Boolean): ReportTripStatusState
+    data object Loading: ReportTripStatusState
+    data class Error(val message: String?): ReportTripStatusState
 }

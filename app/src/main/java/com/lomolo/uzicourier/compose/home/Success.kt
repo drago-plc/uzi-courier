@@ -179,11 +179,11 @@ private fun DefaultHomeScreen(
             Marker(
                 zIndex = 1.0f,
                 anchor = Offset(0.5f, 0.5f),
-                state = MarkerState(polyline.first()),
+                state = MarkerState(deviceDetails.gps),
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.icons8_navigation_90___),
                 flat = true,
                 rotation = SphericalUtil.computeHeading(
-                    polyline.first(),
+                    deviceDetails.gps,
                     if (polyline.size > 1) polyline[polyline.indices.first+1] else polyline[polyline.indices.first]
                 ).toFloat()-45
             )
@@ -228,7 +228,8 @@ private fun DefaultHomeScreen(
                                     modifier = Modifier
                                         .align(Alignment.BottomCenter),
                                     tripViewModel = tripViewModel,
-                                    trip = s.trip
+                                    trip = s.trip,
+                                    assignment = assignment
                                 )
                             }
                         }
