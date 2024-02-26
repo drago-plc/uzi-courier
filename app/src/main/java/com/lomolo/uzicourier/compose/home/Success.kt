@@ -184,7 +184,7 @@ private fun DefaultHomeScreen(
                 flat = true,
                 rotation = SphericalUtil.computeHeading(
                     polyline.first(),
-                    polyline[polyline.indices.first+1]
+                    if (polyline.size > 1) polyline[polyline.indices.first+1] else polyline[polyline.indices.first]
                 ).toFloat()-45
             )
         }
