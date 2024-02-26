@@ -125,16 +125,16 @@ private fun DefaultHomeScreen(
         when(val s = tripViewModel.getCourierTripState) {
             is GetCourierTripState.Success -> {
                 if (s.trip != null) {
-                    courierPosition.position = deviceDetails.gps
+                    if (deviceDetails.gps.latitude != 0.0 && deviceDetails.gps.longitude != 0.0) courierPosition.position = deviceDetails.gps
                     if (s.trip.end_location != null && deviceDetails.mapLoaded) {
                         cameraPositionState.animate(
                             CameraUpdateFactory.newCameraPosition(
                                 CameraPosition(
-                                    if (polyline.isNotEmpty()) polyline.first() else deviceDetails.gps,
+                                    courierPosition.position,
                                     17f,
                                     60f,
                                     if (polyline.isNotEmpty()) SphericalUtil.computeHeading(
-                                        deviceDetails.gps,
+                                        courierPosition.position,
                                         polyline.last()
                                     ).toFloat() else 0f
                                 )
@@ -144,16 +144,16 @@ private fun DefaultHomeScreen(
                     if (s.trip.route != null) polyline = PolyUtil.decode(s.trip.route.polyline)
                     if (polyline.isNotEmpty()) {
                         tripViewModel.reverseGeocode(polyline.last())
-                        if (PolyUtil.isLocationOnPath(deviceDetails.gps, polyline, true)) {
+                        if (PolyUtil.isLocationOnPath(courierPosition.position, polyline, true)) {
                             val newRoute = polyline.subList(
                                 0,
                                 PolyUtil.locationIndexOnPath(
-                                    deviceDetails.gps,
+                                    courierPosition.position,
                                     polyline.toMutableList(),
                                     true
                                 )+1
                             ).toMutableList()
-                            newRoute.add(deviceDetails.gps)
+                            newRoute.add(courierPosition.position)
                             polyline = newRoute.toList()
                         }
                     }
@@ -183,7 +183,7 @@ private fun DefaultHomeScreen(
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.icons8_navigation_90___),
                 flat = true,
                 rotation = SphericalUtil.computeHeading(
-                    deviceDetails.gps,
+                    courierPosition.position,
                     if (polyline.size > 1) polyline[polyline.indices.first+1] else polyline[polyline.indices.first]
                 ).toFloat()-45
             )
