@@ -14,3 +14,5 @@
 .cxx
 local.properties
 /app/src/main/res/values/developer_config.xml
+# Sentry Config File
+sentry.properties
