@@ -7,13 +7,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.lomolo.uzicourier.common.countryPhoneCode
+import com.lomolo.uzicourier.compose.signin.SessionViewModel
+import com.lomolo.uzicourier.model.Session
 import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.network.UziRestApiServiceInterface
 import com.lomolo.uzicourier.repository.CourierInterface
+import com.lomolo.uzicourier.repository.SessionInterface
+import com.lomolo.uzicourier.repository.SessionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -21,8 +30,35 @@ import java.io.IOException
 class MainViewModel(
     private val uziRestApiService: UziRestApiServiceInterface,
     private val uziGqlApiService: UziGqlApiInterface,
-    private val courierRepository: CourierInterface
+    private val courierRepository: CourierInterface,
+    private val sessionRepository: SessionInterface
 ): ViewModel() {
+    val sessionUiState: StateFlow<Session> = sessionRepository
+        .getSession()
+        .filterNotNull()
+        .map {
+            if (it.isNotEmpty()) {
+                Session(
+                    token = it[0].token,
+                    id = it[0].id,
+                    courierStatus = it[0].courierStatus,
+                    phone = it[0].phone,
+                    isCourier = it[0].isCourier,
+                    onboarding = it[0].onboarding
+                )
+            } else {
+                Session()
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            initialValue = Session(),
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS)
+        )
+
+    companion object {
+        private const val TIMEOUT_MILLIS = 5_000L
+    }
     private val _deviceDetails: MutableStateFlow<DeviceDetails> = MutableStateFlow(DeviceDetails())
     val deviceDetailsUiState = _deviceDetails.asStateFlow()
 
@@ -36,10 +72,12 @@ class MainViewModel(
         _deviceDetails.update {
             it.copy(gps = gps)
         }
-        viewModelScope.launch(Dispatchers.IO) {
-            if (gps.latitude != 0.0 && gps.longitude != 0.0) {
-                delay(4000L)
-                courierRepository.trackCourierGps(gps)
+        if (sessionUiState.value.token.isNotBlank()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                if (gps.latitude != 0.0 && gps.longitude != 0.0) {
+                    delay(4000L)
+                    courierRepository.trackCourierGps(gps)
+                }
             }
         }
     }
