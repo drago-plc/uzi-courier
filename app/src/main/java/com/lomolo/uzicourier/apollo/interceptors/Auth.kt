@@ -27,7 +27,7 @@ class AuthInterceptor(
         }
 
         val response = chain.proceed(
-            request.newBuilder().addHeader("Authorization", "Bearer ${session!!.first().token}").build()
+            if (!session.isNullOrEmpty()) request.newBuilder().addHeader("Authorization", "Bearer ${session.first().token}").build() else request
         )
 
         return if (response.statusCode == 401) {
