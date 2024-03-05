@@ -18,11 +18,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.CustomCap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
 import com.google.maps.android.compose.GoogleMap
@@ -102,13 +104,21 @@ private fun DefaultHomeScreen(
     session: Session,
     assignment: Trip
 ) {
+    val context = LocalContext.current
     val hasAssignment = assignment.id.isNotBlank()
     val isAuthed = session.token.isNotBlank()
     val uiSettings by remember {
         mutableStateOf(MapUiSettings(zoomControlsEnabled = false, compassEnabled = false))
     }
     val mapProperties by remember {
-        mutableStateOf(MapProperties(mapType = MapType.TERRAIN))
+        mutableStateOf(
+            MapProperties(
+                mapStyleOptions = MapStyleOptions.loadRawResourceStyle(
+                    context,
+                    R.raw.style_json
+                )
+            )
+        )
     }
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(deviceDetails.gps, 17f)
