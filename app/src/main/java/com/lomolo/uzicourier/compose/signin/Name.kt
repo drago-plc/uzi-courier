@@ -114,13 +114,14 @@ fun Name(
                                     onNavigateTo(HomeScreenDestination.route)
                                 }
                         },
+                        shape = MaterialTheme.shapes.small,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(60.dp),
+                            .height(48.dp),
                     ) {
                         Text(
                             text = stringResource(R.string.proceed),
-                            style = MaterialTheme.typography.labelMedium
+                            style = MaterialTheme.typography.labelSmall
                         )
                     }
                 }
@@ -142,13 +143,14 @@ fun Name(
                                         onNavigateTo(HomeScreenDestination.route)
                                     }
                             },
+                            shape = MaterialTheme.shapes.small,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(60.dp),
+                                .height(48.dp),
                         ) {
                             Text(
                                 text = stringResource(R.string.retry),
-                                style = MaterialTheme.typography.labelMedium
+                                style = MaterialTheme.typography.labelSmall
                             )
                         }
                     }

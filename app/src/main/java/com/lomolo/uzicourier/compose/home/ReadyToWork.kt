@@ -69,7 +69,7 @@ internal fun ReadyToWork(
                         scope.launch { snackbarHostState.showSnackbar("You are now ${s.lowercase()}!") }
                     }
                 },
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = PaddingValues(8.dp),
                 colors = ButtonColors(
                     containerColor = if (session.courierStatus == CourierStatus.ONLINE) Color(0xff1b7f37) else ButtonDefaults.buttonColors().containerColor,
                     contentColor = ButtonDefaults.buttonColors().contentColor,
@@ -82,7 +82,7 @@ internal fun ReadyToWork(
             ) {
                 Text(
                     text = "Go",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.labelSmall,
                 )
             }
         }
