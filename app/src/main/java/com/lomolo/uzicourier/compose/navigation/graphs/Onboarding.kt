@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -194,7 +195,7 @@ fun NavGraphBuilder.onboarding(
                             Text(
                                 text = stringResource(R.string.mcr_doc_text),
                                 modifier = Modifier
-                                    .padding(start = 16.dp, bottom = 8.dp)
+                                    .padding(20.dp)
                             )
                         }
                     )

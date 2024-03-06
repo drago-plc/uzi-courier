@@ -81,7 +81,7 @@ fun UploadDocumentScreen(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .clip(MaterialTheme.shapes.small)
-                .size(360.dp)
+                .size(240.dp)
                 .clickable {
                     scope.launch {
                         pickMedia.launch(

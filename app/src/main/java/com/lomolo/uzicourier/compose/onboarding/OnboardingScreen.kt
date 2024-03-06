@@ -12,6 +12,7 @@ import androidx.compose.material.icons.twotone.CheckCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -118,7 +119,7 @@ private fun Heading(
     ){
         Text(
             text = heading,
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleMedium
         )
         Text(
             text = subHeading,
@@ -166,10 +167,15 @@ private fun RequiredDocuments(
                                 )
                             }
                             UploadVerificationStatus.VERIFYING -> {
-                                Text(
-                                    text = stringResource(R.string.verifying),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                SuggestionChip(
+                                    onClick = { /*TODO*/ },
+                                    label = {
+                                        Text(
+                                            text = stringResource(R.string.verifying),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                                        )
+                                    }
                                 )
                             }
                             UploadVerificationStatus.VERIFIED -> {
@@ -203,7 +209,8 @@ private fun RequiredDocuments(
                     .padding(8.dp)
                     .clickable {
                         println(document)
-                        val allowClick = (document == null) || (courierDocs.isEmpty()) || (document.verification.toString() == UploadVerificationStatus.REJECTED.toString() || document.verification == UploadVerificationStatus.ONBOARDING)
+                        val allowClick =
+                            (document == null) || (courierDocs.isEmpty()) || (document.verification.toString() == UploadVerificationStatus.REJECTED.toString() || document.verification == UploadVerificationStatus.ONBOARDING)
                         if (allowClick) {
                             onNavigateTo(doc.route)
                         }
