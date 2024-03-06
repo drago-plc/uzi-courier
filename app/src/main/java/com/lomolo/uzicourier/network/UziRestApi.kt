@@ -12,16 +12,16 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 
 interface UziRestApiServiceInterface {
-    @GET("ipinfo")
+    @GET("v1/ipinfo")
     suspend fun getIpinfo(): Ipinfo
     @Headers("Content-Type: application/json")
-    @POST("signin")
+    @POST("v1/signin")
     suspend fun signIn(@Body input: SignIn): Session
     @Headers("Content-Type: application/json")
-    @POST("user/onboard")
+    @POST("v1/user/onboard")
     suspend fun onboardUser(@Body input: SignIn): Session
     @Multipart
-    @POST("courier/upload/document")
+    @POST("v1/courier/upload/document")
     suspend fun uploadImage(@Part body: MultipartBody.Part): UploadRes
 }
 
