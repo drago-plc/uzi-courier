@@ -49,12 +49,12 @@ internal fun ReadyToWork(
             if (session.courierStatus == CourierStatus.OFFLINE) {
                 Text(
                     "Ready to work?",
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleSmall
                 )
             } else {
                 Text(
                     "Take a rest?",
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleSmall
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
