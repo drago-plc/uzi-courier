@@ -5,6 +5,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -205,7 +207,7 @@ private fun DefaultHomeScreen(
         exit = fadeOut(),
         enter = EnterTransition.None
     ) {
-        Box(modifier = modifier) {
+        Box {
             when {
                 !isAuthed -> {
                     NotAuthedScreen(
@@ -217,7 +219,8 @@ private fun DefaultHomeScreen(
                 isAuthed && !hasAssignment -> {
                     ReadyToWork(
                         modifier = Modifier
-                            .align(Alignment.BottomCenter),
+                            .align(Alignment.BottomCenter)
+                            .padding(28.dp),
                         mainViewModel = mainViewModel,
                         sessionViewModel = sessionViewModel,
                         snackbarHostState = snackbarHostState,

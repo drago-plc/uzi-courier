@@ -31,6 +31,7 @@ internal fun HomeErrorScreen(
         )
         Button(
             onClick = { mainViewModel.getIpinfo() },
+            shape = MaterialTheme.shapes.small
         ) {
             Text(
                 text = stringResource(R.string.retry),

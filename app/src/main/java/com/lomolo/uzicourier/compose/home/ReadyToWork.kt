@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -37,12 +36,14 @@ internal fun ReadyToWork(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
+            .background(
+                MaterialTheme.colorScheme.background,
+                MaterialTheme.shapes.small
+            )
     ) {
         Row(
             modifier = Modifier
-                .padding(8.dp),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (session.courierStatus == CourierStatus.OFFLINE) {
@@ -52,7 +53,7 @@ internal fun ReadyToWork(
                 )
             } else {
                 Text(
-                    "Go offline?",
+                    "Take a rest?",
                     style = MaterialTheme.typography.titleMedium
                 )
             }
@@ -69,16 +70,14 @@ internal fun ReadyToWork(
                         scope.launch { snackbarHostState.showSnackbar("You are now ${s.lowercase()}!") }
                     }
                 },
-                contentPadding = PaddingValues(8.dp),
+                contentPadding = PaddingValues(16.dp),
                 colors = ButtonColors(
                     containerColor = if (session.courierStatus == CourierStatus.ONLINE) Color(0xff1b7f37) else ButtonDefaults.buttonColors().containerColor,
                     contentColor = ButtonDefaults.buttonColors().contentColor,
                     disabledContainerColor = ButtonDefaults.buttonColors().disabledContainerColor,
                     disabledContentColor = ButtonDefaults.buttonColors().disabledContentColor
                 ),
-                modifier = Modifier
-                    .padding(16.dp),
-                shape = MaterialTheme.shapes.extraSmall
+                shape = MaterialTheme.shapes.small
             ) {
                 Text(
                     text = "Go",
