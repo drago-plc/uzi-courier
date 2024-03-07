@@ -31,34 +31,7 @@ class MainViewModel(
     private val uziRestApiService: UziRestApiServiceInterface,
     private val uziGqlApiService: UziGqlApiInterface,
     private val courierRepository: CourierInterface,
-    private val sessionRepository: SessionInterface
 ): ViewModel() {
-    val sessionUiState: StateFlow<Session> = sessionRepository
-        .getSession()
-        .filterNotNull()
-        .map {
-            if (it.isNotEmpty()) {
-                Session(
-                    token = it[0].token,
-                    id = it[0].id,
-                    courierStatus = it[0].courierStatus,
-                    phone = it[0].phone,
-                    isCourier = it[0].isCourier,
-                    onboarding = it[0].onboarding
-                )
-            } else {
-                Session()
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            initialValue = Session(),
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS)
-        )
-
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
-    }
     private val _deviceDetails: MutableStateFlow<DeviceDetails> = MutableStateFlow(DeviceDetails())
     val deviceDetailsUiState = _deviceDetails.asStateFlow()
 
@@ -68,14 +41,14 @@ class MainViewModel(
     var setCourierStatusState: SetCourierStatusState by mutableStateOf(SetCourierStatusState.Success)
         private set
 
-    fun setDeviceLocation(gps: LatLng) {
+    fun setDeviceLocation(gps: LatLng, session: Session) {
         _deviceDetails.update {
             it.copy(gps = gps)
         }
-        if (sessionUiState.value.token.isNotBlank()) {
+        if (session.token.isNotBlank()) {
             viewModelScope.launch(Dispatchers.IO) {
-                if (gps.latitude != 0.0 && gps.longitude != 0.0) {
-                    delay(4000L)
+                delay(4000L)
+                if (_deviceDetails.value.gps.latitude != 0.0 && _deviceDetails.value.gps.longitude != 0.0) {
                     courierRepository.trackCourierGps(gps)
                 }
             }

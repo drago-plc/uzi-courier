@@ -40,6 +40,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.lomolo.uzicourier.compose.signin.SessionViewModel
 import com.lomolo.uzicourier.permissions.LocationPermission
 import com.lomolo.uzicourier.ui.theme.UziCourierTheme
 import java.util.concurrent.TimeUnit
@@ -49,6 +50,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var locationPriority: Int = Priority.PRIORITY_HIGH_ACCURACY
     private val mainViewModel: MainViewModel by viewModels { UziViewModelProvider.Factory }
+    private val sessionViewModel: SessionViewModel by viewModels { UziViewModelProvider.Factory }
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,10 +89,13 @@ class MainActivity : ComponentActivity() {
                     )
                         .addOnSuccessListener { location: Location? ->
                             if (location != null) {
-                                mainViewModel.setDeviceLocation(LatLng(
-                                    location.latitude,
-                                    location.longitude
-                                ))
+                                mainViewModel.setDeviceLocation(
+                                    LatLng(
+                                        location.latitude,
+                                        location.longitude,
+                                    ),
+                                    sessionViewModel.sessionUiState.value,
+                                )
                             }
                         }
                 }
@@ -107,7 +112,7 @@ class MainActivity : ComponentActivity() {
                 val locationCallback: LocationCallback = object: LocationCallback() {
                     override fun onLocationResult(p0: LocationResult) {
                         for (location in p0.locations) {
-                            mainViewModel.setDeviceLocation(LatLng(location.latitude, location.longitude))
+                            mainViewModel.setDeviceLocation(LatLng(location.latitude, location.longitude), sessionViewModel.sessionUiState.value)
                         }
                     }
                 }

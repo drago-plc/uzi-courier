@@ -20,7 +20,6 @@ object UziViewModelProvider {
                 uziApplication().container.uziRestApiService,
                 uziApplication().container.uziGqlApiRepository,
                 uziApplication().container.courierRepository,
-                uziApplication().container.sessionRepository
             )
             mainViewModel
         }
