@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
@@ -38,6 +39,10 @@ fun HomeScreen(
 ) {
     val deviceDetails by mainViewModel.deviceDetailsUiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(true) {
+        tripViewModel.getTripAssignment(session.id)
+    }
 
     Scaffold(
         snackbarHost = {

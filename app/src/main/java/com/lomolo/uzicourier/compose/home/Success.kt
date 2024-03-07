@@ -3,17 +3,14 @@ package com.lomolo.uzicourier.compose.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -31,7 +28,6 @@ import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
@@ -48,8 +44,6 @@ import com.lomolo.uzicourier.compose.signin.UserNameDestination
 import com.lomolo.uzicourier.model.CourierStatus
 import com.lomolo.uzicourier.model.Session
 import com.lomolo.uzicourier.model.Trip
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 @Composable
 internal fun HomeSuccessScreen(
@@ -64,9 +58,6 @@ internal fun HomeSuccessScreen(
     onNavigateTo: (String) -> Unit = {},
     assignment: Trip
 ) {
-    LaunchedEffect(Unit) {
-        tripViewModel.getTripAssignment(session.id)
-    }
     val isAuthed = session.token.isNotBlank()
     val isOnboarding = session.onboarding
     val courierStatus = session.courierStatus
