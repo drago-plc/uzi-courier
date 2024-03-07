@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.apollographql.apollo3.exception.ApolloException
 import com.google.android.gms.maps.model.LatLng
 import com.lomolo.uzicourier.common.countryPhoneCode
 import com.lomolo.uzicourier.model.Session
@@ -41,7 +42,11 @@ class MainViewModel(
             viewModelScope.launch(Dispatchers.IO) {
                 delay(4000L)
                 if (_deviceDetails.value.gps.latitude != 0.0 && _deviceDetails.value.gps.longitude != 0.0) {
-                    courierRepository.trackCourierGps(gps)
+                    try {
+                        courierRepository.trackCourierGps(gps)
+                    } catch(e: ApolloException) {
+                        e.printStackTrace()
+                    }
                 }
             }
         }
