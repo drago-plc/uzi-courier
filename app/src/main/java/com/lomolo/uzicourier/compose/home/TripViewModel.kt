@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo3.exception.ApolloException
 import com.google.android.gms.maps.model.LatLng
 import com.lomolo.uzicourier.GetTripQuery
-import com.lomolo.uzicourier.ReportTripStatusMutation
 import com.lomolo.uzicourier.ReverseGeocodeQuery
 import com.lomolo.uzicourier.model.Trip
 import com.lomolo.uzicourier.network.UziGqlApiInterface
@@ -53,7 +52,9 @@ class TripViewModel(
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-    fun getTripAssignment(userId: String) = tripRepository.getTripAssignment(userId)
+    fun getTripAssignment(userId: String) {
+        tripRepository.getTripAssignment(userId)
+    }
 
     fun getCourierAssignedTrip() {
         if (getCourierTripState !is GetCourierTripState.Loading && tripUiState.value.id.isNotBlank()) {

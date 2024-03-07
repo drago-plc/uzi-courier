@@ -40,8 +40,10 @@ fun HomeScreen(
     val deviceDetails by mainViewModel.deviceDetailsUiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(true) {
-        tripViewModel.getTripAssignment(session.id)
+    LaunchedEffect(session) {
+        if (session.id.isNotBlank()) {
+            tripViewModel.getTripAssignment(session.id)
+        }
     }
 
     Scaffold(
