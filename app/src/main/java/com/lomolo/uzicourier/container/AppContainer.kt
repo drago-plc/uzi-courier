@@ -62,7 +62,7 @@ class DefaultContainer(private val context: Context): AppContainer {
 
     override val apolloClient = ApolloClient.Builder()
         .okHttpClient(okhttpClient)
-        .httpServerUrl("${baseApi}/v1/api")
+        .httpServerUrl("${baseApi}/api/graphql")
         .webSocketServerUrl("${wss}/subscription")
         .webSocketReopenWhen {_, attempt ->
             delay(attempt * 1000)
