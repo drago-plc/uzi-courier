@@ -52,9 +52,7 @@ class TripViewModel(
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-    fun getTripAssignment(userId: String) {
-        tripRepository.getTripAssignment(userId)
-    }
+    fun getTripAssignment(userId: String) = tripRepository.getTripAssignment(userId)
 
     fun getCourierAssignedTrip() {
         if (getCourierTripState !is GetCourierTripState.Loading && tripUiState.value.id.isNotBlank()) {
@@ -64,6 +62,7 @@ class TripViewModel(
                     val res = tripRepository.getCourierTrip(tripUiState.value.id).dataOrThrow()
                     GetCourierTripState.Success(res.getTripDetails)
                 } catch (e: ApolloException) {
+                    e.printStackTrace()
                     GetCourierTripState.Error(e.message)
                 }
             }

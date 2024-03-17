@@ -123,47 +123,10 @@ private fun DefaultHomeScreen(
         position = deviceDetails.gps
     )
 
-    LaunchedEffect(Unit) { tripViewModel.getCourierAssignedTrip() }
-    LaunchedEffect(key1 = tripViewModel.getCourierTripState, key3=polyline, key2 = deviceDetails.gps) {
-        when(val s = tripViewModel.getCourierTripState) {
-            is GetCourierTripState.Success -> {
-                if (s.trip != null) {
-                    if (deviceDetails.gps.latitude != 0.0 && deviceDetails.gps.longitude != 0.0) courierPosition.position = deviceDetails.gps
-                    if (s.trip.end_location != null && deviceDetails.mapLoaded) {
-                        cameraPositionState.animate(
-                            CameraUpdateFactory.newCameraPosition(
-                                CameraPosition(
-                                    courierPosition.position,
-                                    17f,
-                                    60f,
-                                    if (polyline.isNotEmpty()) SphericalUtil.computeHeading(
-                                        courierPosition.position,
-                                        polyline.last()
-                                    ).toFloat() else 0f
-                                )
-                            )
-                        )
-                    }
-                    if (s.trip.route != null) polyline = PolyUtil.decode(s.trip.route.polyline)
-                    if (polyline.isNotEmpty()) {
-                        tripViewModel.reverseGeocode(polyline.last())
-                        if (PolyUtil.isLocationOnPath(courierPosition.position, polyline, true)) {
-                            val newRoute = polyline.subList(
-                                0,
-                                PolyUtil.locationIndexOnPath(
-                                    courierPosition.position,
-                                    polyline.toMutableList(),
-                                    true
-                                )+1
-                            ).toMutableList()
-                            newRoute.add(courierPosition.position)
-                            polyline = newRoute.toList()
-                        }
-                    }
-                }
-            }
-        }
+    LaunchedEffect(key1 = session) {
+        if (isAuthed) tripViewModel.getTripAssignment(session.id)
     }
+    LaunchedEffect(Unit) { tripViewModel.getCourierAssignedTrip() }
 
     GoogleMap(
         modifier = modifier,
@@ -220,12 +183,6 @@ private fun DefaultHomeScreen(
                 }
                 else -> {
                     when (val s = tripViewModel.getCourierTripState) {
-                        GetCourierTripState.Loading -> {
-                            Loader(
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
                         is GetCourierTripState.Success -> {
                             if (s.trip != null) {
                                 TripScreen(

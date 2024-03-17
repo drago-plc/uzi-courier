@@ -9,6 +9,7 @@ import com.lomolo.uzicourier.network.UziGqlApiInterface
 import com.lomolo.uzicourier.sql.dao.TripDao
 import com.lomolo.uzicourier.type.TripStatus
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
 
 interface TripInterface{
@@ -36,6 +37,7 @@ class TripRepository(
                     )
                 )
         }
+        .catch { it.printStackTrace() }
 
     override suspend fun clearTrips() = tripDao.clearTrips()
 
