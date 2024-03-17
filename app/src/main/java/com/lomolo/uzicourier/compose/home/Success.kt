@@ -148,10 +148,6 @@ private fun DefaultHomeScreen(
                 state = MarkerState(deviceDetails.gps),
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.icons8_navigation_90___),
                 flat = true,
-                rotation = SphericalUtil.computeHeading(
-                    courierPosition.position,
-                    if (polyline.size > 1) polyline[polyline.indices.first+1] else polyline[polyline.indices.first]
-                ).toFloat()-45
             )
         }
     }
