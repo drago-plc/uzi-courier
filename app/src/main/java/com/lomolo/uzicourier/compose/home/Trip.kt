@@ -52,7 +52,7 @@ internal fun TripScreen(
                 TripStatus.COURIER_ASSIGNED.toString() -> {
                     Column {
                         Text(
-                            "Your trip is ready. Take it or leave it.",
+                            "Your trip is ready. Confirm to take it.",
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.size(16.dp))
