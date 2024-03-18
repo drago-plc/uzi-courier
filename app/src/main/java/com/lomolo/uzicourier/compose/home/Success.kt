@@ -185,11 +185,12 @@ private fun DefaultHomeScreen(
         )
         if (polyline.isNotEmpty()) {
             Marker(
-                zIndex = 1.0f,
+                zIndex = 1f,
                 anchor = Offset(0.5f, 0.5f),
                 state = MarkerState(courierPosition.position),
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.icons8_navigation_100__2_),
                 flat = true,
+                rotation = computeHeading
             )
         }
     }
