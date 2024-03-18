@@ -57,7 +57,9 @@ internal fun TripScreen(
                         Spacer(modifier = Modifier.size(16.dp))
                         Button(
                             modifier = Modifier.fillMaxWidth(),
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                tripViewModel.reportTripStatus(TripStatus.COURIER_ARRIVING)
+                            },
                             shape = MaterialTheme.shapes.small
                         ) {
                             if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {

@@ -187,7 +187,7 @@ private fun DefaultHomeScreen(
             Marker(
                 zIndex = 1.0f,
                 anchor = Offset(0.5f, 0.5f),
-                state = MarkerState(deviceDetails.gps),
+                state = MarkerState(courierPosition.position),
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.icons8_navigation_100__2_),
                 flat = true,
             )
