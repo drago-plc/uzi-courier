@@ -65,7 +65,7 @@ class DefaultContainer(private val context: Context): AppContainer {
         .httpServerUrl("${baseApi}/api/graphql")
         .webSocketServerUrl("${wss}/subscription")
         .webSocketReopenWhen {_, attempt ->
-            delay(attempt * 1000)
+            delay(attempt * 2000)
             true
         }
         .addHttpInterceptor(

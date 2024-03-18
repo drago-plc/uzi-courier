@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -123,10 +124,8 @@ private fun DefaultHomeScreen(
         position = deviceDetails.gps
     )
 
-    LaunchedEffect(key1 = session) {
-        if (isAuthed) tripViewModel.getTripAssignment(session.id)
-    }
     LaunchedEffect(Unit) { tripViewModel.getCourierAssignedTrip() }
+    if (isAuthed) tripViewModel.getTripAssignment(session.id).collectAsState(initial = null)
 
     GoogleMap(
         modifier = modifier,
