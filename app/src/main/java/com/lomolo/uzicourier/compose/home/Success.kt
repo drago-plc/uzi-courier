@@ -3,10 +3,8 @@ package com.lomolo.uzicourier.compose.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,14 +41,12 @@ import com.lomolo.uzicourier.DeviceDetails
 import com.lomolo.uzicourier.MainViewModel
 import com.lomolo.uzicourier.R
 import com.lomolo.uzicourier.TripAssignmentSubscription
-import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.onboarding.OnboardingDestination
 import com.lomolo.uzicourier.compose.signin.SessionViewModel
 import com.lomolo.uzicourier.compose.signin.UserNameDestination
 import com.lomolo.uzicourier.model.CourierStatus
 import com.lomolo.uzicourier.model.Session
 import com.lomolo.uzicourier.model.Trip
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 internal fun HomeSuccessScreen(
