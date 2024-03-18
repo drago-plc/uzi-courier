@@ -49,14 +49,57 @@ internal fun TripScreen(
                 .padding(8.dp)
         ) {
             when (assignment.status) {
-                TripStatus.COURIER_ASSIGNED.toString(),
-                TripStatus.COURIER_ARRIVING.toString(),
+                TripStatus.COURIER_ASSIGNED.toString() -> {
+                    Column {
+                        Text(
+                            "Your trip is ready.",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Spacer(modifier = Modifier.size(16.dp))
+                        Button(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = { /*TODO*/ },
+                            shape = MaterialTheme.shapes.small
+                        ) {
+                            if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {
+                                Loader()
+                            } else {
+                                Text(
+                                    "KES ${
+                                        NumberFormat.getNumberInstance().format(trip.cost)
+                                    } / ${tripDistance(trip.route!!.distance)}",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(12.dp)
+                                )
+                            }
+
+                        }
+                    }
+                }
+                TripStatus.COURIER_ARRIVING.toString() -> {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        shape = MaterialTheme.shapes.small,
+                        onClick = {
+                            tripViewModel.reportTripStatus(TripStatus.COURIER_EN_ROUTE)
+                        }
+                    ) {
+                        if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {
+                            Loader()
+                        } else {
+                            Text(
+                                "En-Route",
+                                style = MaterialTheme.typography.titleMedium,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(12.dp)
+                            )
+                        }
+                    }
+                }
                 TripStatus.COURIER_EN_ROUTE.toString() -> {
-                    Text(
-                        "Your trip is ready.",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Box(
+                    Column(
                         Modifier
                             .padding(8.dp)
                     ) {
@@ -141,78 +184,30 @@ internal fun TripScreen(
                                     }
                                 }
                             }
-
-                            ReverseGeocodeState.Loading -> {
+                        }
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            shape = MaterialTheme.shapes.small,
+                            onClick = {
+                                tripViewModel.reportTripStatus(TripStatus.COMPLETE)
+                            }
+                        ) {
+                            if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {
                                 Loader()
+                            } else {
+                                Text(
+                                    "End trip",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(12.dp)
+                                )
                             }
                         }
-                    }
-
-                    when (assignment.status) {
-                        TripStatus.COURIER_ASSIGNED.toString() -> {
-                            Button(
-                                modifier = Modifier.fillMaxWidth(),
-                                onClick = { /*TODO*/ },
-                                shape = MaterialTheme.shapes.small
-                            ) {
-                                if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {
-                                    Loader()
-                                } else {
-                                    Text(
-                                    "KES ${NumberFormat.getNumberInstance().format(trip.cost)} / ${tripDistance(trip.route!!.distance)}",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier.padding(12.dp)
-                                    )
-                                }
-
-                            }
-                        }
-
-                        TripStatus.COURIER_ARRIVING.toString() -> {
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                shape = MaterialTheme.shapes.small,
-                                onClick = {
-                                    tripViewModel.reportTripStatus(TripStatus.COURIER_EN_ROUTE)
-                                }
-                            ) {
-                                if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {
-                                    Loader()
-                                } else {
-                                    Text(
-                                        "Start trip",
-                                        style = MaterialTheme.typography.labelSmall
-                                    )
-                                }
-                            }
-                        }
-
-                        TripStatus.COURIER_EN_ROUTE.toString() -> {
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                shape = MaterialTheme.shapes.small,
-                                onClick = {
-                                    tripViewModel.reportTripStatus(TripStatus.COMPLETE)
-                                }
-                            ) {
-                                if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {
-                                    Loader()
-                                } else {
-                                    Text(
-                                        "End trip",
-                                        style = MaterialTheme.typography.labelSmall
-                                    )
-                                }
-                            }
-                        }
-                        else -> {}
                     }
                 }
                 TripStatus.COMPLETE.toString() -> {
-                    Box(
+                    Column(
                         Modifier
                             .padding(8.dp)
                     ) {
@@ -246,7 +241,6 @@ internal fun TripScreen(
                         }
                     }
                 }
-                else -> {}
             }
         }
     }
