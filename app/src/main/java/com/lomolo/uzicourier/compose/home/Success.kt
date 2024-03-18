@@ -228,6 +228,7 @@ private fun DefaultHomeScreen(
                                     modifier = Modifier
                                         .align(Alignment.BottomCenter)
                                         .padding(8.dp),
+                                    arrived = polyline.size == 1,
                                     tripViewModel = tripViewModel,
                                     trip = s.trip,
                                     assignment = assignment

@@ -34,7 +34,8 @@ internal fun TripScreen(
     modifier: Modifier = Modifier,
     tripViewModel: TripViewModel,
     trip: GetTripQuery.GetTripDetails,
-    assignment: Trip
+    assignment: Trip,
+    arrived: Boolean
 ) {
     val tripDistance = { it: Int -> if (it > 1000) "${it/1000}KM" else "${it}M"}
     Box(modifier = modifier) {
@@ -51,7 +52,7 @@ internal fun TripScreen(
                 TripStatus.COURIER_ASSIGNED.toString() -> {
                     Column {
                         Text(
-                            "Your trip is ready.",
+                            "Your trip is ready. Take it or leave it.",
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.size(16.dp))
@@ -79,31 +80,47 @@ internal fun TripScreen(
                     }
                 }
                 TripStatus.COURIER_ARRIVING.toString() -> {
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        shape = MaterialTheme.shapes.small,
-                        onClick = {
-                            tripViewModel.reportTripStatus(TripStatus.COURIER_EN_ROUTE)
-                        }
-                    ) {
-                        if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {
-                            Loader()
-                        } else {
-                            Text(
-                                "En-Route",
-                                style = MaterialTheme.typography.titleMedium,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(12.dp)
-                            )
+                    Column {
+                        Text(
+                            if (arrived) "Start trip. Proceed to your drop-off location" else "Heading to your pick-up location",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        if (arrived) {
+                            Button(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                shape = MaterialTheme.shapes.small,
+                                onClick = {
+                                    tripViewModel.reportTripStatus(TripStatus.COURIER_EN_ROUTE)
+                                }
+                            ) {
+                                if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {
+                                    Loader()
+                                } else {
+                                    Text(
+                                        "En-Route",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.padding(12.dp)
+                                    )
+                                }
+                            }
                         }
                     }
                 }
                 TripStatus.COURIER_EN_ROUTE.toString() -> {
+                    Text(
+                        if (arrived) "You have arrived" else "Heading to your drop-off location",
+                        style = MaterialTheme.typography.titleMedium
+                    )
                     Column(
                         Modifier
                             .padding(8.dp)
                     ) {
+                        Text(
+                            "Heading to your drop-off location",
+                            style = MaterialTheme.typography.titleMedium
+                        )
                         when (val g = tripViewModel.reverseGeocodeState) {
                             is ReverseGeocodeState.Success -> {
                                 if (g.geocode != null) {
@@ -186,23 +203,25 @@ internal fun TripScreen(
                                 }
                             }
                         }
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            shape = MaterialTheme.shapes.small,
-                            onClick = {
-                                tripViewModel.reportTripStatus(TripStatus.COMPLETE)
-                            }
-                        ) {
-                            if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {
-                                Loader()
-                            } else {
-                                Text(
-                                    "End trip",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.padding(12.dp)
-                                )
+                        if (arrived) {
+                            Button(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                shape = MaterialTheme.shapes.small,
+                                onClick = {
+                                    tripViewModel.reportTripStatus(TripStatus.COMPLETE)
+                                }
+                            ) {
+                                if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {
+                                    Loader()
+                                } else {
+                                    Text(
+                                        "End trip",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.padding(12.dp)
+                                    )
+                                }
                             }
                         }
                     }
@@ -212,33 +231,31 @@ internal fun TripScreen(
                         Modifier
                             .padding(8.dp)
                     ) {
-                        Column {
-                            Text(
-                                "Get paid for the trip",
-                                textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                            Spacer(modifier = Modifier.size(16.dp))
-                            Text(
-                                "KES ${NumberFormat.getNumberInstance().format(trip.cost)}",
-                                style = MaterialTheme.typography.labelLarge,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(12.dp)
-                            )
-                            Spacer(modifier = Modifier.size(12.dp))
-                            Button(
-                                onClick = {
-                                    tripViewModel.clearTrips()
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                shape = MaterialTheme.shapes.small
-                            ) {
-                               Text(
-                                   "Done",
-                                   style = MaterialTheme.typography.labelSmall
-                               )
-                            }
+                        Text(
+                            "Get paid for the trip",
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                        Spacer(modifier = Modifier.size(16.dp))
+                        Text(
+                            "KES ${NumberFormat.getNumberInstance().format(trip.cost)}",
+                            style = MaterialTheme.typography.labelLarge,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(12.dp)
+                        )
+                        Spacer(modifier = Modifier.size(12.dp))
+                        Button(
+                            onClick = {
+                                tripViewModel.clearTrips()
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            shape = MaterialTheme.shapes.small
+                        ) {
+                           Text(
+                               "Done",
+                               style = MaterialTheme.typography.labelSmall
+                           )
                         }
                     }
                 }
