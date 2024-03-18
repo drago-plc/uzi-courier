@@ -129,7 +129,7 @@ private fun DefaultHomeScreen(
     if (isAuthed) {
         tripViewModel.getTripAssignment(session.id).collectAsState(initial = null)
         LaunchedEffect(key1 = assignment) {
-            tripViewModel.getCourierAssignedTrip(assignment.id)
+            if (assignment.id.isNotBlank()) tripViewModel.getCourierAssignedTrip(assignment.id)
         }
     }
     LaunchedEffect(key1 = tripViewModel.getCourierTripState, key3 = polyline, key2 = deviceDetails.gps) {
