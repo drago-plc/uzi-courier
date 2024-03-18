@@ -4,6 +4,7 @@ query GetTrip($tripId: UUID!) {
         status
         route {
             polyline
+            distance
         }
         cost
         start_location {

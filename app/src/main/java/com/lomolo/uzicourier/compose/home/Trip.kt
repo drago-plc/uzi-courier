@@ -1,5 +1,6 @@
 package com.lomolo.uzicourier.compose.home
 
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ internal fun TripScreen(
     trip: GetTripQuery.GetTripDetails,
     assignment: Trip
 ) {
+    val tripDistance = { it: Int -> if (it > 1000) "${it/1000}KM" else "${it}M"}
     Box(modifier = modifier) {
         Column(
             modifier = Modifier
@@ -47,7 +49,9 @@ internal fun TripScreen(
                 .padding(8.dp)
         ) {
             when (assignment.status) {
-                TripStatus.COURIER_ASSIGNED.toString(), TripStatus.COURIER_ARRIVING.toString(), TripStatus.COURIER_EN_ROUTE.toString() -> {
+                TripStatus.COURIER_ASSIGNED.toString(),
+                TripStatus.COURIER_ARRIVING.toString(),
+                TripStatus.COURIER_EN_ROUTE.toString() -> {
                     Text(
                         "Your trip is ready.",
                         style = MaterialTheme.typography.titleMedium
@@ -147,21 +151,21 @@ internal fun TripScreen(
                     when (assignment.status) {
                         TripStatus.COURIER_ASSIGNED.toString() -> {
                             Button(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                shape = MaterialTheme.shapes.small,
-                                onClick = {
-                                    tripViewModel.reportTripStatus(TripStatus.COURIER_ARRIVING)
-                                }
+                                modifier = Modifier.fillMaxWidth(),
+                                onClick = { /*TODO*/ },
+                                shape = MaterialTheme.shapes.small
                             ) {
                                 if (tripViewModel.reportTripStatusState is ReportTripStatusState.Loading) {
                                     Loader()
                                 } else {
                                     Text(
-                                        "Arrive",
-                                        style = MaterialTheme.typography.labelSmall
+                                    "KES ${NumberFormat.getNumberInstance().format(trip.cost)} / ${tripDistance(trip.route!!.distance)}",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.padding(12.dp)
                                     )
                                 }
+
                             }
                         }
 
