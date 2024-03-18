@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -20,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.apollographql.apollo3.api.ApolloResponse
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -40,7 +38,6 @@ import com.google.maps.android.compose.rememberMarkerState
 import com.lomolo.uzicourier.DeviceDetails
 import com.lomolo.uzicourier.MainViewModel
 import com.lomolo.uzicourier.R
-import com.lomolo.uzicourier.TripAssignmentSubscription
 import com.lomolo.uzicourier.compose.onboarding.OnboardingDestination
 import com.lomolo.uzicourier.compose.signin.SessionViewModel
 import com.lomolo.uzicourier.compose.signin.UserNameDestination
@@ -129,9 +126,12 @@ private fun DefaultHomeScreen(
         mutableFloatStateOf(0f)
     }
 
-    var u: State<ApolloResponse<TripAssignmentSubscription.Data>?>? = null
-    if (isAuthed) u = tripViewModel.getTripAssignment(session.id).collectAsState(initial = null)
-    LaunchedEffect(key1 = u) { tripViewModel.getCourierAssignedTrip() }
+    if (isAuthed) {
+        tripViewModel.getTripAssignment(session.id).collectAsState(initial = null)
+        LaunchedEffect(key1 = assignment) {
+            tripViewModel.getCourierAssignedTrip(assignment.id)
+        }
+    }
     LaunchedEffect(key1 = tripViewModel.getCourierTripState, key3 = polyline, key2 = deviceDetails.gps) {
         val s = tripViewModel.getCourierTripState
         val courierIndex: Int

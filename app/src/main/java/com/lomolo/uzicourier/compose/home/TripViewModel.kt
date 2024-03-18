@@ -54,12 +54,12 @@ class TripViewModel(
 
     fun getTripAssignment(userId: String) = tripRepository.getTripAssignment(userId)
 
-    fun getCourierAssignedTrip() {
-        if (getCourierTripState !is GetCourierTripState.Loading && tripUiState.value.id.isNotBlank()) {
+    fun getCourierAssignedTrip(tripId: String) {
+        if (getCourierTripState !is GetCourierTripState.Loading) {
             getCourierTripState = GetCourierTripState.Loading
             viewModelScope.launch {
                 getCourierTripState = try {
-                    val res = tripRepository.getCourierTrip(tripUiState.value.id).dataOrThrow()
+                    val res = tripRepository.getCourierTrip(tripId).dataOrThrow()
                     GetCourierTripState.Success(res.getTripDetails)
                 } catch (e: ApolloException) {
                     e.printStackTrace()
