@@ -40,7 +40,10 @@ internal fun TripScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background)
+                .background(
+                    MaterialTheme.colorScheme.background,
+                    MaterialTheme.shapes.small
+                )
                 .padding(8.dp)
         ) {
             when (assignment.status) {

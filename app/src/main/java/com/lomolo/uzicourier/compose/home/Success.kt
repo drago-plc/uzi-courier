@@ -3,13 +3,17 @@ package com.lomolo.uzicourier.compose.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -19,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.apollographql.apollo3.api.ApolloResponse
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -38,6 +43,7 @@ import com.google.maps.android.compose.rememberMarkerState
 import com.lomolo.uzicourier.DeviceDetails
 import com.lomolo.uzicourier.MainViewModel
 import com.lomolo.uzicourier.R
+import com.lomolo.uzicourier.TripAssignmentSubscription
 import com.lomolo.uzicourier.compose.loader.Loader
 import com.lomolo.uzicourier.compose.onboarding.OnboardingDestination
 import com.lomolo.uzicourier.compose.signin.SessionViewModel
@@ -45,6 +51,7 @@ import com.lomolo.uzicourier.compose.signin.UserNameDestination
 import com.lomolo.uzicourier.model.CourierStatus
 import com.lomolo.uzicourier.model.Session
 import com.lomolo.uzicourier.model.Trip
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 internal fun HomeSuccessScreen(
@@ -117,15 +124,56 @@ private fun DefaultHomeScreen(
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(deviceDetails.gps, 17f)
     }
-    var polyline by rememberSaveable {
+    var polyline by remember {
         mutableStateOf(listOf<LatLng>())
     }
     val courierPosition = rememberMarkerState(
         position = deviceDetails.gps
     )
+    var computeHeading by remember {
+        mutableFloatStateOf(0f)
+    }
 
-    LaunchedEffect(Unit) { tripViewModel.getCourierAssignedTrip() }
-    if (isAuthed) tripViewModel.getTripAssignment(session.id).collectAsState(initial = null)
+    var u: State<ApolloResponse<TripAssignmentSubscription.Data>?>? = null
+    if (isAuthed) u = tripViewModel.getTripAssignment(session.id).collectAsState(initial = null)
+    LaunchedEffect(key1 = u) { tripViewModel.getCourierAssignedTrip() }
+    LaunchedEffect(key1 = tripViewModel.getCourierTripState, key3 = polyline, key2 = deviceDetails.gps) {
+        val s = tripViewModel.getCourierTripState
+        val courierIndex: Int
+        if (s is GetCourierTripState.Success && s.trip != null) {
+            if (deviceDetails.gps.latitude != 0.0 && deviceDetails.gps.longitude != 0.0) {
+                courierPosition.position = deviceDetails.gps
+                if (deviceDetails.mapLoaded) {
+                    cameraPositionState.animate(
+                        CameraUpdateFactory.newLatLngZoom(
+                            courierPosition.position,
+                            17f
+                        ), 2500
+                    )
+                }
+            }
+            if (s.trip.route != null && polyline.isEmpty()) polyline = PolyUtil.decode(s.trip.route.polyline)
+        }
+        // Recompute polyline - lay device position on the polyline
+        if (polyline.isNotEmpty()) {
+            if (PolyUtil.isLocationOnPath(courierPosition.position, polyline, true)) {
+                courierIndex = PolyUtil.locationIndexOnPath(courierPosition.position, polyline, true)
+                val newRoute = polyline.subList(
+                    courierIndex+1,
+                    polyline.size
+                ).toMutableList()
+                polyline = newRoute
+            }
+        }
+        computeHeading = when(polyline.size) {
+            0 -> 0f-45
+            1 -> SphericalUtil.computeHeading(courierPosition.position, polyline[0]).toFloat()-45
+            else -> {
+                val i = PolyUtil.locationIndexOnPath(courierPosition.position, polyline, true)
+                SphericalUtil.computeHeading(courierPosition.position, polyline[i+1]).toFloat()-45
+            }
+        }
+    }
 
     GoogleMap(
         modifier = modifier,
@@ -182,7 +230,8 @@ private fun DefaultHomeScreen(
                             if (s.trip != null) {
                                 TripScreen(
                                     modifier = Modifier
-                                        .align(Alignment.BottomCenter),
+                                        .align(Alignment.BottomCenter)
+                                        .padding(8.dp),
                                     tripViewModel = tripViewModel,
                                     trip = s.trip,
                                     assignment = assignment
