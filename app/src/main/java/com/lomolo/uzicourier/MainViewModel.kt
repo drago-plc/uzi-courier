@@ -1,5 +1,6 @@
 package com.lomolo.uzicourier
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -25,6 +26,7 @@ class MainViewModel(
     private val uziGqlApiService: UziGqlApiInterface,
     private val courierRepository: CourierInterface,
 ): ViewModel() {
+    private val _logTag = "MainViewModel"
     private val _deviceDetails: MutableStateFlow<DeviceDetails> = MutableStateFlow(DeviceDetails())
     val deviceDetailsUiState = _deviceDetails.asStateFlow()
 
@@ -64,12 +66,14 @@ class MainViewModel(
                         gps = LatLng(ipGps[0].toDouble(), ipGps[1].toDouble()),
                         country = response.country,
                         countryFlag = response.countryFlag,
-                        countryPhoneCode = countryPhoneCode[response.country]!!
+                        countryPhoneCode = countryPhoneCode[response.country] ?: ""
                     )
                 }
-            } catch (e: Throwable) {
-                deviceDetailsState = DeviceDetailsUiState.Error(e.localizedMessage)
-                e.printStackTrace()
+            } catch (e: IOException) {
+                e.message?.let {
+                    deviceDetailsState = DeviceDetailsUiState.Error(it)
+                    Log.d(_logTag, "Something went wrong $e")
+                }
             }
         }
     }
